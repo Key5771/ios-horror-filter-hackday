@@ -1,0 +1,6 @@
+framework module Pods_FearlessVideoFilter {
+  umbrella header "Pods-FearlessVideoFilter-umbrella.h"
+
+  export *
+  module * { export * }
+}
