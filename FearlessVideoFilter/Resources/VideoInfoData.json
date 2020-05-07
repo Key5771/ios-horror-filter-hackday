@@ -1,0 +1,25 @@
+[
+    {
+        "thumbnailName": "samsara_room_1_thumbnail",
+        "title": "samsara room 1",
+        "videoLength": "05:02"
+    },
+    {
+        "thumbnailName": "samsara_room_2_thumbnail",
+        "title": "samsara room 2",
+        "videoLength": "04:09"
+    },
+    {
+        "thumbnailName": "samsara_room_3_thumbnail",
+        "title": "samsara room 3",
+        "videoLength": "06:34"
+    },{
+        "thumbnailName": "dorothy_1_thumbnail",
+        "title": "dorothy 1",
+        "videoLength": "04:35"
+    },{
+        "thumbnailName": "dorothy_2_thumbnail",
+        "title": "dorothy 2",
+        "videoLength": "04:01"
+    }
+]
