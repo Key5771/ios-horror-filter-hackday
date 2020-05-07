@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import AVFoundation
+import AVKit
 
 class MainViewController: UIViewController {
     @IBOutlet weak var collectionView: UICollectionView!
@@ -57,6 +59,23 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
         return CGSize(width: width, height: width * 0.75)
     }
     
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let infoData = dummyArr[indexPath.row]
+        if let videoURL = Bundle.main.url(forResource: infoData.videoName, withExtension: "mov") {
+            // 블러처리 해주는 기초적인 클래스 구현 - 현재는 한 구간만 블러 가능
+//            let filteredItem = FilteredPlayerItem(videoURL: videoURL)
+//            filteredItem.blur(from: 10.0, to: 30.0, animationRate: 1.0)
+//            let player = AVPlayer(playerItem: filteredItem.playerItem)
+            
+            let player = AVPlayer(url: videoURL)
+            let controller = AVPlayerViewController()
+            controller.player = player
+
+            present(controller, animated: true) {
+                player.play()
+            }
+        }
+    }
     
 }
 

@@ -10,11 +10,13 @@ import Foundation
 
 class VideoInfo: Decodable {
     var thumbnailName: String
+    var videoName: String
     var title: String
     var videoLength: String
     
-    init(thumbnailName: String, title: String, videoLength: String) {
+    init(thumbnailName: String, videoName: String, title: String, videoLength: String) {
         self.thumbnailName = thumbnailName
+        self.videoName = videoName
         self.title = title
         self.videoLength = videoLength
     }
