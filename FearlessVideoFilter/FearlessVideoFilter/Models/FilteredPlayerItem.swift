@@ -40,14 +40,14 @@ class FilteredPlayerItem: NSObject {
             } else if seconds < start + animationRate {
                 filter.setValue((seconds-start) * blurParam, forKey: kCIInputRadiusKey)
             } else if seconds > end - animationRate {
-                filter.setValue((end - seconds) * 10.0, forKey: kCIInputRadiusKey)
+                filter.setValue((end - seconds) * self.blurIntensity, forKey: kCIInputRadiusKey)
             } else if seconds > end {
                 filter.setValue(0, forKey: kCIInputRadiusKey)
             }
                     
             // 원본 이미지 크기만큼 블러처리 된 부분을 잘라냄
             let output = filter.outputImage!.cropped(to: request.sourceImage.extent)
-                    
+            
             // Provide the filter output to the composition
             request.finish(with: output, context: nil)
         })

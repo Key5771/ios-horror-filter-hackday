@@ -13,12 +13,16 @@ class VideoInfo: Decodable {
     var videoName: String
     var title: String
     var videoLength: String
+    var start: String
+    var end: String
     
-    init(thumbnailName: String, videoName: String, title: String, videoLength: String) {
+    init(thumbnailName: String, videoName: String, title: String, videoLength: String, start: String, end: String) {
         self.thumbnailName = thumbnailName
         self.videoName = videoName
         self.title = title
         self.videoLength = videoLength
+        self.start = start
+        self.end = end
     }
     
     static func makeDummyData() -> [VideoInfo] {
