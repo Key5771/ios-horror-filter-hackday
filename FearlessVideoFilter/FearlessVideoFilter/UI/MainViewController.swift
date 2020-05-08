@@ -32,11 +32,37 @@ class MainViewController: UIViewController {
     }
 }
 
-extension MainViewController: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+extension MainViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return dummyArr.count
     }
     
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "VideoCollectionViewCell", for: indexPath) as? VideoCollectionViewCell else {
+            return UICollectionViewCell()
+        }
+        
+        let infoData = dummyArr[indexPath.row]
+        
+        let imageURL = getURL(dummyArr[indexPath.row].thumbnailName)
+        
+        do {
+            if let thumbnailURL = Bundle.main.url(forResource: imageURL[0], withExtension: imageURL[1]) {
+                let data = try Data(contentsOf: thumbnailURL)
+                cell.thumbnailImageView.image = UIImage(data: data)
+            }
+        } catch let err {
+             print("Error : \(err.localizedDescription)")
+        }
+        
+        cell.titleLabel.text = infoData.title
+        cell.videoLengthLabel.text = infoData.videoLength
+        
+        return cell
+    }
+}
+
+extension MainViewController: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let width = collectionView.frame.width / 2 - 5.0
         return CGSize(width: width, height: width * 0.75)
@@ -65,32 +91,6 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDelegate
                 player.play()
             }
         }
-    }
-}
-
-extension MainViewController: UICollectionViewDataSource {
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "VideoCollectionViewCell", for: indexPath) as? VideoCollectionViewCell else {
-            return UICollectionViewCell()
-        }
-        
-        let infoData = dummyArr[indexPath.row]
-        
-        let imageURL = getURL(dummyArr[indexPath.row].thumbnailName)
-        
-        do {
-            if let thumbnailURL = Bundle.main.url(forResource: imageURL[0], withExtension: imageURL[1]) {
-                let data = try Data(contentsOf: thumbnailURL)
-                cell.thumbnailImageView.image = UIImage(data: data)
-            }
-        } catch let err {
-             print("Error : \(err.localizedDescription)")
-        }
-        
-        cell.titleLabel.text = infoData.title
-        cell.videoLengthLabel.text = infoData.videoLength
-        
-        return cell
     }
 }
 
