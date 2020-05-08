@@ -24,7 +24,12 @@ class MainViewController: UIViewController {
         collectionView.register(nibName, forCellWithReuseIdentifier: "VideoCollectionViewCell")
         
     }
-
+    
+    // 파일의 이름과 확장자를 .으로 분리.
+    // index 0에는 파일의 이름을 index 1에는 파일의 확장자를 저장하여 배열로 리턴.
+    func getURL(_ str: String) -> [String] {
+        return str.components(separatedBy: ".")
+    }
 }
 
 extension MainViewController: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
@@ -38,8 +43,9 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDelegate
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let infoData = dummyArr[indexPath.row]
-        if let videoURL = Bundle.main.url(forResource: infoData.videoName, withExtension: "mov") {
+//        let infoData = dummyArr[indexPath.row]
+        let videoName = getURL(dummyArr[indexPath.row].videoName)
+        if let videoURL = Bundle.main.url(forResource: videoName[0], withExtension: videoName[1]) {
             // 블러처리 해주는 기초적인 클래스 구현 - 현재는 한 구간만 블러 가능
             let filteredItem = FilteredPlayerItem(videoURL: videoURL)
             
@@ -70,8 +76,10 @@ extension MainViewController: UICollectionViewDataSource {
         
         let infoData = dummyArr[indexPath.row]
         
+        let imageURL = getURL(dummyArr[indexPath.row].thumbnailName)
+        
         do {
-            if let thumbnailURL = Bundle.main.url(forResource: infoData.thumbnailName, withExtension: "png") {
+            if let thumbnailURL = Bundle.main.url(forResource: imageURL[0], withExtension: imageURL[1]) {
                 let data = try Data(contentsOf: thumbnailURL)
                 cell.thumbnailImageView.image = UIImage(data: data)
             }
