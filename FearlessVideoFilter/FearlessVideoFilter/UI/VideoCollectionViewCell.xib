@@ -19,9 +19,6 @@
                 <subviews>
                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="1TR-Xd-LoT">
                         <rect key="frame" x="0.5" y="0.5" width="199" height="100"/>
-                        <constraints>
-                            <constraint firstAttribute="height" constant="100" id="fKk-tG-gGx"/>
-                        </constraints>
                     </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2Yv-Qq-dqo">
                         <rect key="frame" x="5" y="105.5" width="43.5" height="20.5"/>
@@ -40,11 +37,12 @@
             <constraints>
                 <constraint firstAttribute="bottom" secondItem="5FY-jq-aCD" secondAttribute="bottom" constant="5" id="70t-3t-zpg"/>
                 <constraint firstItem="1TR-Xd-LoT" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="0.5" id="9Uz-jO-SiF"/>
-                <constraint firstItem="2Yv-Qq-dqo" firstAttribute="top" secondItem="1TR-Xd-LoT" secondAttribute="bottom" constant="5" id="S5G-sh-HnU"/>
+                <constraint firstItem="1TR-Xd-LoT" firstAttribute="bottom" secondItem="gTV-IL-0wX" secondAttribute="bottom" priority="999" constant="-49.5" id="S5G-sh-HnU"/>
                 <constraint firstItem="5FY-jq-aCD" firstAttribute="top" secondItem="2Yv-Qq-dqo" secondAttribute="bottom" constant="3.5" id="YHK-Jo-REB"/>
                 <constraint firstItem="2Yv-Qq-dqo" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="5" id="eqD-lR-fYV"/>
                 <constraint firstItem="1TR-Xd-LoT" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="0.5" id="noj-41-NgR"/>
                 <constraint firstAttribute="trailing" secondItem="1TR-Xd-LoT" secondAttribute="trailing" constant="0.5" id="o80-zP-Tlu"/>
+                <constraint firstItem="2Yv-Qq-dqo" firstAttribute="top" secondItem="1TR-Xd-LoT" secondAttribute="bottom" constant="5" id="qiW-Of-s7C"/>
                 <constraint firstItem="5FY-jq-aCD" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="5" id="upR-wK-sn8"/>
             </constraints>
             <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>

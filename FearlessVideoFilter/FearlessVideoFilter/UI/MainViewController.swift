@@ -25,6 +25,11 @@ class MainViewController: UIViewController {
         
     }
     
+    // 화면 회전 시 cell size가 업데이트되지 않는 현상 방지
+    override func viewWillLayoutSubviews() {
+        collectionView.reloadData()
+    }
+    
     // 파일의 이름과 확장자를 .으로 분리.
     // index 0에는 파일의 이름을 index 1에는 파일의 확장자를 저장하여 배열로 리턴.
     func getURL(_ str: String) -> [String] {
