@@ -46,6 +46,7 @@ class MainViewController: UIViewController {
     
     // 화면 회전 시 cell size가 업데이트되지 않는 현상 방지
     override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
         collectionView.reloadData()
     }
     

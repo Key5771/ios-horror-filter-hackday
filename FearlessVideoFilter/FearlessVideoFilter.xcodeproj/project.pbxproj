@@ -32,6 +32,7 @@
 		25F8B9F92464359C005A4CC4 /* samsara_room_1.mov in Resources */ = {isa = PBXBuildFile; fileRef = 25F8B9F62464359A005A4CC4 /* samsara_room_1.mov */; };
 		25F8B9FA2464359C005A4CC4 /* samsara_room_2.mov in Resources */ = {isa = PBXBuildFile; fileRef = 25F8B9F72464359C005A4CC4 /* samsara_room_2.mov */; };
 		25F8B9FC24644F5E005A4CC4 /* FilteredPlayerItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25F8B9FB24644F5E005A4CC4 /* FilteredPlayerItem.swift */; };
+		25F8B9FE24690652005A4CC4 /* VideoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25F8B9FD24690652005A4CC4 /* VideoViewController.swift */; };
 		94B8D797BF5EF7D7A963837F /* Pods_FearlessVideoFilter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0E6160DAFA8622FBCF329A6F /* Pods_FearlessVideoFilter.framework */; };
 		EA4FFD692469376E009F7FC6 /* VideoInfoAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA4FFD682469376E009F7FC6 /* VideoInfoAPI.swift */; };
 		EA4FFD6A2469376E009F7FC6 /* VideoInfoAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA4FFD682469376E009F7FC6 /* VideoInfoAPI.swift */; };
@@ -86,6 +87,7 @@
 		25F8B9F62464359A005A4CC4 /* samsara_room_1.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = samsara_room_1.mov; sourceTree = "<group>"; };
 		25F8B9F72464359C005A4CC4 /* samsara_room_2.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = samsara_room_2.mov; sourceTree = "<group>"; };
 		25F8B9FB24644F5E005A4CC4 /* FilteredPlayerItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilteredPlayerItem.swift; sourceTree = "<group>"; };
+		25F8B9FD24690652005A4CC4 /* VideoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoViewController.swift; sourceTree = "<group>"; };
 		47E2633032CF1E94EA508D9A /* Pods-FearlessVideoFilter.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FearlessVideoFilter.release.xcconfig"; path = "Target Support Files/Pods-FearlessVideoFilter/Pods-FearlessVideoFilter.release.xcconfig"; sourceTree = "<group>"; };
 		59D9BAE6ADE0A6AEF3F2F68A /* Pods-FearlessVideoFilter.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FearlessVideoFilter.debug.xcconfig"; path = "Target Support Files/Pods-FearlessVideoFilter/Pods-FearlessVideoFilter.debug.xcconfig"; sourceTree = "<group>"; };
 		807DBB14A3404E8DBE41FB9B /* Pods-FearlessVideoFilter-FearlessVideoFilterUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FearlessVideoFilter-FearlessVideoFilterUITests.release.xcconfig"; path = "Target Support Files/Pods-FearlessVideoFilter-FearlessVideoFilterUITests/Pods-FearlessVideoFilter-FearlessVideoFilterUITests.release.xcconfig"; sourceTree = "<group>"; };
@@ -189,6 +191,7 @@
 				25F8B98D2462C119005A4CC4 /* MainViewController.swift */,
 				25F8B9BF2463EA32005A4CC4 /* VideoCollectionViewCell.swift */,
 				25F8B9C02463EA32005A4CC4 /* VideoCollectionViewCell.xib */,
+				25F8B9FD24690652005A4CC4 /* VideoViewController.swift */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -505,6 +508,7 @@
 			files = (
 				EA4FFD692469376E009F7FC6 /* VideoInfoAPI.swift in Sources */,
 				25F8B98E2462C119005A4CC4 /* MainViewController.swift in Sources */,
+				25F8B9FE24690652005A4CC4 /* VideoViewController.swift in Sources */,
 				25F8B98A2462C119005A4CC4 /* AppDelegate.swift in Sources */,
 				25F8B9DC2463FFD1005A4CC4 /* VideoInfo.swift in Sources */,
 				25F8B9C12463EA32005A4CC4 /* VideoCollectionViewCell.swift in Sources */,
