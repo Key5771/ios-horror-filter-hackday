@@ -18,7 +18,6 @@ class VideoViewController: UIViewController {
     
     var player: AVPlayer!
     var playerLayer: AVPlayerLayer!
-    var isInitialized = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -52,22 +51,11 @@ class VideoViewController: UIViewController {
         } else {                // landscape mode
             width = height / 9 * 16
         }
-                
-        if(!isInitialized){
-            print("makeConstraints")
-            containerView.snp.makeConstraints { make in
-                make.center.equalToSuperview()
-                make.width.equalTo(width)
-                make.height.equalTo(height)
-            }
-            isInitialized = true
-        } else {
-            print("updateConstraints")
-            containerView.snp.updateConstraints { make in
-                make.center.equalToSuperview()
-                make.width.equalTo(width)
-                make.height.equalTo(height)
-            }
+        
+        containerView.snp.remakeConstraints { make in
+            make.center.equalToSuperview()
+            make.width.equalTo(width)
+            make.height.equalTo(height)
         }
     }
     
@@ -75,5 +63,4 @@ class VideoViewController: UIViewController {
         super.viewDidLayoutSubviews()
         playerLayer.frame = containerView.bounds
     }
-    
 }
