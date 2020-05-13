@@ -16,7 +16,8 @@ class VideoInfo: Decodable {
     var start: String
     var end: String
     
-    init(thumbnailName: String, videoName: String, title: String, videoLength: String, start: String, end: String) {
+    init(thumbnailName: String, videoName: String, title: String, videoLength: String,
+         start: String, end: String) {
         self.thumbnailName = thumbnailName
         self.videoName = videoName
         self.title = title

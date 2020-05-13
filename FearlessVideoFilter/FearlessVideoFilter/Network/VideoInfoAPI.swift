@@ -24,7 +24,7 @@ struct Header: Codable {
 // MARK: - BODY
 struct Body: Codable {
     var clips: [Clip]
-    var hasNext: Bool?
+    var hasNext: Bool
 }
 
 
@@ -53,12 +53,14 @@ class NetworkRequest {
         case http404
     }
     
-    func requestVideoInfo(api: API, method: Alamofire.HTTPMethod, parameters: Parameters? = nil, completion handler: @escaping ([Clip]) -> Void) {
+    // API 요청 함수.
+    func requestVideoInfo(api: API, method: Alamofire.HTTPMethod, parameters: Parameters? = nil, completion handler: @escaping (Body) -> Void) {
         // responseDecodable
         AF.request(baseUrl+api.rawValue, method: .get, parameters: parameters).responseDecodable(of: APIStruct.self) { (response) in
+            // TODO: - 이부분은 API와 맞추어 성공, 실패를 나누어야 할 듯.
             switch response.result {
             case .success(let object):
-                let data = object.body.clips
+                let data = object.body
                 handler(data)
             case .failure(let error):
                 print(error)
