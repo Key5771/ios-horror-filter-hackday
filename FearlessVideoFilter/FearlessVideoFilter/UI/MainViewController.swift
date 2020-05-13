@@ -9,6 +9,8 @@
 import UIKit
 import AVFoundation
 import AVKit
+import Alamofire
+import SDWebImage
 
 class MainViewController: UIViewController {
     @IBOutlet weak var collectionView: UICollectionView!
@@ -26,10 +28,12 @@ class MainViewController: UIViewController {
         let nibName = UINib(nibName: "VideoCollectionViewCell", bundle: nil)
         collectionView.register(nibName, forCellWithReuseIdentifier: "VideoCollectionViewCell")
         
+        
+        // TODO: - hasNext == true인 경우 구현해야 함. cell이 마지막까지 스크롤 됐을 때 실행할 예정.
         NetworkRequest.shared.requestVideoInfo(api: .videoInfo, method: .get) { (response) in
             // 현재 infoArr에 저장되는 부분이 늦게 실행되기 때문에 reloadData()를 해주어야 셀에서 표현가능
-            self.infoArr = response
-//            self.collectionView.reloadData()
+            self.infoArr = response.clips
+            self.collectionView.reloadData()
         }
     }
     
@@ -47,7 +51,7 @@ class MainViewController: UIViewController {
 
 extension MainViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return dummyArr.count
+        return infoArr.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -55,23 +59,40 @@ extension MainViewController: UICollectionViewDataSource {
             return UICollectionViewCell()
         }
         
-        let infoData = dummyArr[indexPath.row]
         // 기존의 dummyArr대신 infoArr을 사용하면 됩니다.
-//        let infoData = infoArr[indexPath.row]
+        let infoData = infoArr[indexPath.row]
         
-        let imageURL = getURL(dummyArr[indexPath.row].thumbnailName)
-
-        do {
-            if let thumbnailURL = Bundle.main.url(forResource: imageURL[0], withExtension: imageURL[1]) {
-                let data = try Data(contentsOf: thumbnailURL)
-                cell.thumbnailImageView.image = UIImage(data: data)
-            }
-        } catch let err {
-             print("Error : \(err.localizedDescription)")
-        }
+        // thumbnailUrl을 호출할 때, ?type=f480을 호출하기 위한 변수
+        let thumbnailUrl = infoArr[indexPath.row].thumbnailUrl + "?type=f480"
+        print("thumbnailUrl: \(thumbnailUrl)")
+        cell.thumbnailImageView.sd_setImage(with: URL(string: thumbnailUrl))
+        
+        // channelEmblemUrl을 호출할 때, ?type=f200을 호출하기 위한 변수
+//        let channelEmblemUrl = infoArr[indexPath.row].channelEmblemUrl + "?type=f200"
         
         cell.titleLabel.text = infoData.title
-        cell.videoLengthLabel.text = infoData.videoLength
+        
+        let duration = infoData.duration
+        var minute: Int = 0
+        var seconds: Int = 0
+        
+        // 초 단위로 이루어진 duration을 분, 초 단위로 분리.
+        if duration > 60 {
+            minute = duration / 60
+            seconds = duration % 60
+            if seconds < 10 {
+                cell.videoLengthLabel.text = "\(String(minute)):\(0)\(String(seconds))"
+            } else {
+                cell.videoLengthLabel.text = "\(String(minute)):\(String(seconds))"
+            }
+        } else {
+            seconds = duration
+            if seconds < 10 {
+                cell.videoLengthLabel.text = "\(0):\(0)\(String(seconds))"
+            } else {
+                cell.videoLengthLabel.text = "\(0):\(String(seconds))"
+            }
+        }
         
         return cell
     }
