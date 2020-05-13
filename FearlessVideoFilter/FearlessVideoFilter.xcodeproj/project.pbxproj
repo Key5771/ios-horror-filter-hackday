@@ -33,6 +33,8 @@
 		25F8B9FA2464359C005A4CC4 /* samsara_room_2.mov in Resources */ = {isa = PBXBuildFile; fileRef = 25F8B9F72464359C005A4CC4 /* samsara_room_2.mov */; };
 		25F8B9FC24644F5E005A4CC4 /* FilteredPlayerItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25F8B9FB24644F5E005A4CC4 /* FilteredPlayerItem.swift */; };
 		94B8D797BF5EF7D7A963837F /* Pods_FearlessVideoFilter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0E6160DAFA8622FBCF329A6F /* Pods_FearlessVideoFilter.framework */; };
+		EA4FFD692469376E009F7FC6 /* VideoInfoAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA4FFD682469376E009F7FC6 /* VideoInfoAPI.swift */; };
+		EA4FFD6A2469376E009F7FC6 /* VideoInfoAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA4FFD682469376E009F7FC6 /* VideoInfoAPI.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -90,6 +92,7 @@
 		8E270368536864220C39F3BE /* Pods-FearlessVideoFilter-FearlessVideoFilterUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FearlessVideoFilter-FearlessVideoFilterUITests.debug.xcconfig"; path = "Target Support Files/Pods-FearlessVideoFilter-FearlessVideoFilterUITests/Pods-FearlessVideoFilter-FearlessVideoFilterUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		B4D17B75E7F8285B3E94488E /* Pods_FearlessVideoFilter_FearlessVideoFilterUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FearlessVideoFilter_FearlessVideoFilterUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BFF3324FC06636AF4CA097E6 /* Pods-FearlessVideoFilterTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FearlessVideoFilterTests.release.xcconfig"; path = "Target Support Files/Pods-FearlessVideoFilterTests/Pods-FearlessVideoFilterTests.release.xcconfig"; sourceTree = "<group>"; };
+		EA4FFD682469376E009F7FC6 /* VideoInfoAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoInfoAPI.swift; sourceTree = "<group>"; };
 		F8925DE27A54E60230CDC651 /* Pods_FearlessVideoFilterTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FearlessVideoFilterTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -147,6 +150,7 @@
 		25F8B9882462C119005A4CC4 /* FearlessVideoFilter */ = {
 			isa = PBXGroup;
 			children = (
+				EA4FFD6724692EFD009F7FC6 /* Network */,
 				25F8B9F224642CCC005A4CC4 /* Models */,
 				25F8B9C32463EA3E005A4CC4 /* UI */,
 				25F8B9892462C119005A4CC4 /* AppDelegate.swift */,
@@ -235,6 +239,14 @@
 				BFF3324FC06636AF4CA097E6 /* Pods-FearlessVideoFilterTests.release.xcconfig */,
 			);
 			path = Pods;
+			sourceTree = "<group>";
+		};
+		EA4FFD6724692EFD009F7FC6 /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				EA4FFD682469376E009F7FC6 /* VideoInfoAPI.swift */,
+			);
+			path = Network;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -488,6 +500,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EA4FFD692469376E009F7FC6 /* VideoInfoAPI.swift in Sources */,
 				25F8B98E2462C119005A4CC4 /* MainViewController.swift in Sources */,
 				25F8B98A2462C119005A4CC4 /* AppDelegate.swift in Sources */,
 				25F8B9DC2463FFD1005A4CC4 /* VideoInfo.swift in Sources */,
@@ -501,6 +514,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EA4FFD6A2469376E009F7FC6 /* VideoInfoAPI.swift in Sources */,
 				25F8B9A12462C11B005A4CC4 /* FearlessVideoFilterTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
