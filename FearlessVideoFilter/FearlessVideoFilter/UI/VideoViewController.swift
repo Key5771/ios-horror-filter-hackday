@@ -28,6 +28,33 @@ class VideoViewController: UIViewController {
         
         // containerView에 playerLayer를 추가하여 동영상을 표시
         containerView.layer.addSublayer(playerLayer)
+        layoutOfContainerView()
+    }
+    
+    private func layoutOfContainerView() {
+        let width = self.view.frame.width
+        let height = self.view.frame.height
+
+        if width < height {     // portrait mode
+            let newHeight = width / 16 * 9
+            self.containerView.snp.remakeConstraints { make in
+                make.leading.equalToSuperview()
+                make.trailing.equalToSuperview()
+                make.height.equalTo(newHeight)
+                make.centerY.equalToSuperview()
+            }
+        } else {                // landscape mode
+            let newWidth = height / 9 * 16
+            self.containerView.snp.remakeConstraints { make in
+                make.top.equalToSuperview()
+                make.bottom.equalToSuperview()
+                make.width.equalTo(newWidth)
+                make.centerX.equalToSuperview()
+            }
+        }
+        
+        self.view.layoutIfNeeded()
+        playerLayer.frame = containerView.bounds
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -39,28 +66,12 @@ class VideoViewController: UIViewController {
         super.viewDidAppear(animated)
         player.play()   // view가 나타날때 player 재생
     }
-
-    override func viewWillLayoutSubviews() {
-        super.viewWillLayoutSubviews()
-        
-        var width = self.view.frame.width
-        var height = self.view.frame.height
-        
-        if width < height {     // portrait mode
-            height = width / 16 * 9
-        } else {                // landscape mode
-            width = height / 9 * 16
-        }
-        
-        containerView.snp.remakeConstraints { make in
-            make.center.equalToSuperview()
-            make.width.equalTo(width)
-            make.height.equalTo(height)
-        }
-    }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        playerLayer.frame = containerView.bounds
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        
+        coordinator.animate(alongsideTransition: { _ in
+            self.layoutOfContainerView()
+        }, completion: nil)
     }
 }
