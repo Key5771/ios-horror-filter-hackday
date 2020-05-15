@@ -19,11 +19,14 @@ class MainViewController: UIViewController {
     
     // api를 통해 받아온 데이터를 저장하는 배열
     var infoArr: [Clip] = []
+    var hasNext: Bool = true
+    var page: Int = 1
     
     override func viewDidLoad() {
         super.viewDidLoad()
         collectionView.delegate = self
         collectionView.dataSource = self
+        collectionView.prefetchDataSource = self
         
         let nibName = UINib(nibName: "VideoCollectionViewCell", bundle: nil)
         collectionView.register(nibName, forCellWithReuseIdentifier: "VideoCollectionViewCell")
@@ -32,7 +35,11 @@ class MainViewController: UIViewController {
         // TODO: - hasNext == true인 경우 구현해야 함. cell이 마지막까지 스크롤 됐을 때 실행할 예정.
         NetworkRequest.shared.requestVideoInfo(api: .videoInfo, method: .get) { (response) in
             // 현재 infoArr에 저장되는 부분이 늦게 실행되기 때문에 reloadData()를 해주어야 셀에서 표현가능
-            self.infoArr = response.clips
+            if let next = response.hasNext {
+                self.hasNext = next
+            }
+            guard let data = response.clips else { return }
+            self.infoArr = data
             self.collectionView.reloadData()
         }
     }
@@ -49,7 +56,25 @@ class MainViewController: UIViewController {
     }
 }
 
-extension MainViewController: UICollectionViewDataSource {
+extension MainViewController: UICollectionViewDataSource, UICollectionViewDataSourcePrefetching {
+    // prefetch함수를 이용해 hasNext가 true이면 다음 페이지의 데이터를 요청.
+    // TODO: - 미리 불러올 수 있도록 인덱스 설정을 해주어야 할 듯.
+    func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
+        if hasNext == true {
+            page += 1
+            let params: Parameters = ["page":String(page)]
+            NetworkRequest.shared
+                .requestVideoInfo(api: .videoInfo, method: .get, parameters: params, encoding: URLEncoding.queryString) { (response) in
+                    if let has = response.hasNext {
+                        self.hasNext = has
+                    }
+                    guard let data = response.clips else { return }
+                    self.infoArr.append(contentsOf: data)
+                    self.collectionView.reloadData()
+            }
+        }
+    }
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return infoArr.count
     }
@@ -59,38 +84,35 @@ extension MainViewController: UICollectionViewDataSource {
             return UICollectionViewCell()
         }
         
-        // 기존의 dummyArr대신 infoArr을 사용하면 됩니다.
         let infoData = infoArr[indexPath.row]
         
         // thumbnailUrl을 호출할 때, ?type=f480을 호출하기 위한 변수
-        let thumbnailUrl = infoArr[indexPath.row].thumbnailUrl + "?type=f480"
-        print("thumbnailUrl: \(thumbnailUrl)")
-        cell.thumbnailImageView.sd_setImage(with: URL(string: thumbnailUrl))
+        if let thumbnailUrl = infoData.thumbnailUrl {
+//            print("thumbnailUrl: \(thumbnailUrl)")
+            cell.thumbnailImageView.sd_setImage(with: URL(string: thumbnailUrl + "?type=f480"))
+        }
         
         // channelEmblemUrl을 호출할 때, ?type=f200을 호출하기 위한 변수
 //        let channelEmblemUrl = infoArr[indexPath.row].channelEmblemUrl + "?type=f200"
         
         cell.titleLabel.text = infoData.title
         
-        let duration = infoData.duration
-        var minute: Int = 0
-        var seconds: Int = 0
-        
-        // 초 단위로 이루어진 duration을 분, 초 단위로 분리.
-        if duration > 60 {
-            minute = duration / 60
-            seconds = duration % 60
-            if seconds < 10 {
-                cell.videoLengthLabel.text = "\(String(minute)):\(0)\(String(seconds))"
-            } else {
-                cell.videoLengthLabel.text = "\(String(minute)):\(String(seconds))"
-            }
-        } else {
-            seconds = duration
-            if seconds < 10 {
-                cell.videoLengthLabel.text = "\(0):\(0)\(String(seconds))"
-            } else {
-                cell.videoLengthLabel.text = "\(0):\(String(seconds))"
+        if let duration = infoData.duration {
+            let minute: Int = duration / 60
+            let seconds: Int = duration % 60
+            
+            // 초 단위로 이루어진 duration을 시, 분, 초 단위로 분리.
+            var component = DateComponents()
+            component.setValue(minute, for: .minute)
+            component.setValue(seconds, for: .second)
+            if let date = Calendar.current.date(from: component) {
+                let formatter = DateFormatter()
+                if minute > 60 {
+                    formatter.dateFormat = "HH:mm:ss"
+                } else {
+                    formatter.dateFormat = "mm:ss"
+                }
+                cell.videoLengthLabel.text = formatter.string(from: date)
             }
         }
         

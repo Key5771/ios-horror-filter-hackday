@@ -35,6 +35,7 @@
 		94B8D797BF5EF7D7A963837F /* Pods_FearlessVideoFilter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0E6160DAFA8622FBCF329A6F /* Pods_FearlessVideoFilter.framework */; };
 		EA4FFD692469376E009F7FC6 /* VideoInfoAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA4FFD682469376E009F7FC6 /* VideoInfoAPI.swift */; };
 		EA4FFD6A2469376E009F7FC6 /* VideoInfoAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA4FFD682469376E009F7FC6 /* VideoInfoAPI.swift */; };
+		EA4FFDB6246ECF3B009F7FC6 /* FilterInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA4FFDB5246ECF3B009F7FC6 /* FilterInfo.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -93,6 +94,7 @@
 		B4D17B75E7F8285B3E94488E /* Pods_FearlessVideoFilter_FearlessVideoFilterUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FearlessVideoFilter_FearlessVideoFilterUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BFF3324FC06636AF4CA097E6 /* Pods-FearlessVideoFilterTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FearlessVideoFilterTests.release.xcconfig"; path = "Target Support Files/Pods-FearlessVideoFilterTests/Pods-FearlessVideoFilterTests.release.xcconfig"; sourceTree = "<group>"; };
 		EA4FFD682469376E009F7FC6 /* VideoInfoAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoInfoAPI.swift; sourceTree = "<group>"; };
+		EA4FFDB5246ECF3B009F7FC6 /* FilterInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterInfo.swift; sourceTree = "<group>"; };
 		F8925DE27A54E60230CDC651 /* Pods_FearlessVideoFilterTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FearlessVideoFilterTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -214,6 +216,7 @@
 			children = (
 				25F8B9DB2463FFD1005A4CC4 /* VideoInfo.swift */,
 				25F8B9FB24644F5E005A4CC4 /* FilteredPlayerItem.swift */,
+				EA4FFDB5246ECF3B009F7FC6 /* FilterInfo.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -505,6 +508,7 @@
 				25F8B98A2462C119005A4CC4 /* AppDelegate.swift in Sources */,
 				25F8B9DC2463FFD1005A4CC4 /* VideoInfo.swift in Sources */,
 				25F8B9C12463EA32005A4CC4 /* VideoCollectionViewCell.swift in Sources */,
+				EA4FFDB6246ECF3B009F7FC6 /* FilterInfo.swift in Sources */,
 				25F8B9FC24644F5E005A4CC4 /* FilteredPlayerItem.swift in Sources */,
 				25F8B98C2462C119005A4CC4 /* SceneDelegate.swift in Sources */,
 			);
