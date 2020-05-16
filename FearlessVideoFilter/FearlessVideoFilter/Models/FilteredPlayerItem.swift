@@ -39,7 +39,9 @@ class FilteredPlayerItem: NSObject {
                 filter.setValue(0, forKey: kCIInputRadiusKey)
             } else if seconds < start + animationRate {
                 filter.setValue((seconds-start) * blurParam, forKey: kCIInputRadiusKey)
-            } else if seconds > end - animationRate {
+            } else if seconds < end - animationRate {
+                filter.setValue(self.blurIntensity, forKey: kCIInputRadiusKey)
+            } else if seconds < end {
                 filter.setValue((end - seconds) * blurParam, forKey: kCIInputRadiusKey)
             } else if seconds > end {
                 filter.setValue(0, forKey: kCIInputRadiusKey)
