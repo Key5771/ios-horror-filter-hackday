@@ -77,6 +77,21 @@
                                     <segue destination="inh-YD-ifV" kind="embed" id="D08-bE-eHq"/>
                                 </connections>
                             </containerView>
+                            <button opaque="NO" alpha="0.90000000000000002" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Alz-zh-DwI">
+                                <rect key="frame" x="20" y="49" width="55" height="40"/>
+                                <color key="backgroundColor" systemColor="systemGrayColor" red="0.5568627451" green="0.5568627451" blue="0.57647058819999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="YUE-yl-zuV"/>
+                                    <constraint firstAttribute="width" constant="55" id="qhT-Ta-YRO"/>
+                                </constraints>
+                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <state key="normal" image="xmark" catalog="system">
+                                    <preferredSymbolConfiguration key="preferredSymbolConfiguration" configurationType="pointSize" pointSize="25" weight="semibold"/>
+                                </state>
+                                <connections>
+                                    <action selector="actionCloseButton:" destination="JKy-8Y-Scq" eventType="touchUpInside" id="pE5-5k-MgD"/>
+                                </connections>
+                            </button>
                             <view alpha="0.90000000000000002" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dCi-51-uyr">
                                 <rect key="frame" x="10" y="807" width="394" height="55"/>
                                 <subviews>
@@ -149,13 +164,15 @@
                                 </constraints>
                             </view>
                         </subviews>
-                        <color key="backgroundColor" cocoaTouchSystemColor="viewFlipsideBackgroundColor"/>
+                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <gestureRecognizers/>
                         <constraints>
+                            <constraint firstItem="Alz-zh-DwI" firstAttribute="leading" secondItem="eai-NH-tY6" secondAttribute="leading" constant="20" id="CnD-fr-5n1"/>
                             <constraint firstItem="eai-NH-tY6" firstAttribute="trailing" secondItem="dCi-51-uyr" secondAttribute="trailing" constant="10" id="Vlr-Xb-7Sa"/>
                             <constraint firstItem="dCi-51-uyr" firstAttribute="leading" secondItem="eai-NH-tY6" secondAttribute="leading" constant="10" id="eIj-eb-DsU"/>
                             <constraint firstAttribute="bottom" secondItem="dCi-51-uyr" secondAttribute="bottom" constant="34" id="r3I-em-uCx"/>
                             <constraint firstItem="dCi-51-uyr" firstAttribute="bottom" secondItem="GXU-Md-MUv" secondAttribute="bottom" constant="-20" id="rjb-Ts-1IA"/>
+                            <constraint firstItem="Alz-zh-DwI" firstAttribute="top" secondItem="eai-NH-tY6" secondAttribute="top" constant="5" id="yjh-SL-h6X"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="eai-NH-tY6"/>
                         <variation key="default">
@@ -179,6 +196,7 @@
                         </connections>
                     </view>
                     <connections>
+                        <outlet property="closeButton" destination="Alz-zh-DwI" id="gvg-fz-1oP"/>
                         <outlet property="containerView" destination="fnN-jq-Bk2" id="hpD-mb-vno"/>
                         <outlet property="playPauseButton" destination="JOQ-nI-tX0" id="eN3-QW-evK"/>
                         <outlet property="playbackControlsView" destination="dCi-51-uyr" id="25i-ia-RfG"/>
@@ -205,7 +223,7 @@
                     <view key="view" contentMode="scaleToFill" id="Qhz-Ze-1Jj">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="232"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" cocoaTouchSystemColor="darkTextColor"/>
+                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="EA4-Ch-ZZW"/>
                     </view>
                 </viewController>
@@ -218,5 +236,6 @@
         <image name="gobackward.15" catalog="system" width="60" height="64"/>
         <image name="goforward.15" catalog="system" width="60" height="64"/>
         <image name="play.fill" catalog="system" width="58" height="64"/>
+        <image name="xmark" catalog="system" width="64" height="56"/>
     </resources>
 </document>

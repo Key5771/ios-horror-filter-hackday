@@ -12,16 +12,25 @@ import AVFoundation
 import SnapKit
 
 class VideoViewController: UIViewController {
-
-    @IBOutlet weak var containerView: UIView!
-    @IBOutlet weak var playbackControlsView: UIView!
-    @IBOutlet weak var stepBackwardButton: UIButton!
-    @IBOutlet weak var playPauseButton: UIButton!
-    @IBOutlet weak var stepForwardButton: UIButton!
-    @IBOutlet weak var startTimeLabel: UILabel!
-    @IBOutlet weak var remainingTimeLabel: UILabel!
-    @IBOutlet weak var timeSlider: UISlider!
+    static let pauseButtonImageName = "SF_pause_circle_fill"
+    static let playButtonImageName = "SF_play_circle_fill"
     
+    // layout 관련 상수
+    let closeButtonCornerRadius = CGFloat(10)
+    let playbackControlsViewCornerRadius = CGFloat(15)
+    let containerViewAspect = CGFloat(16.0 / 9.0)
+    
+    // time 관련 상수
+    let jumpingTimeStep = 15.0
+    let prefferedTimeScale = CMTimeScale(600)
+    let timeRemainingFormatter: DateComponentsFormatter = {
+        let formatter = DateComponentsFormatter()
+        formatter.zeroFormattingBehavior = .pad
+        formatter.allowedUnits = [.minute, .second]
+        return formatter
+    }()
+    
+    // MARK: - Variables
 //    var asset: AVAsset?
     var playerItem: AVPlayerItem?
     private var player: AVPlayer? {
@@ -34,32 +43,25 @@ class VideoViewController: UIViewController {
     private var playerLayer: AVPlayerLayer?
     private var durationSeconds: Float = 0.0
     
+    // observer 관련 변수
     private var timeObserverToken: Any?
     private var playerItemStatusObserver: NSKeyValueObservation?
     private var playerItemStepForwardObserver: NSKeyValueObservation?
     private var playerItemStepBackwardObserver: NSKeyValueObservation?
     private var playerTimeControlStatusObserver: NSKeyValueObservation?
-    
-    static let pauseButtonImageName = "SF_pause_circle_fill"
-    static let playButtonImageName = "SF_play_circle_fill"
-    
-    let jumpingTimeStep = 15.0
-    let prefferedTimeScale = CMTimeScale(600)
-    
-    let timeRemainingFormatter: DateComponentsFormatter = {
-        let formatter = DateComponentsFormatter()
-        formatter.zeroFormattingBehavior = .pad
-        formatter.allowedUnits = [.minute, .second]
-        return formatter
-    }()
-    
-    let assetKeysRequiredToPlay = [
-        "playable",
-        "hasProtectedContent"
-    ]
+
+    // MARK: - IBOutlet Propertise
+    @IBOutlet weak var containerView: UIView!
+    @IBOutlet weak var closeButton: UIButton!
+    @IBOutlet weak var playbackControlsView: UIView!
+    @IBOutlet weak var stepBackwardButton: UIButton!
+    @IBOutlet weak var playPauseButton: UIButton!
+    @IBOutlet weak var stepForwardButton: UIButton!
+    @IBOutlet weak var startTimeLabel: UILabel!
+    @IBOutlet weak var remainingTimeLabel: UILabel!
+    @IBOutlet weak var timeSlider: UISlider!
     
     // MARK: - Lifecycle
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         prepareToPlay()
@@ -71,11 +73,6 @@ class VideoViewController: UIViewController {
         // containerView에 playerLayer를 추가하여 동영상을 표시
         containerView.layer.addSublayer(playerLayer)
         setupLayout()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-//        self.navigationController?.setNavigationBarHidden(true, animated: false)
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -104,7 +101,11 @@ class VideoViewController: UIViewController {
     
     // MARK: - Setup
     private func setupLayout() {
-        playbackControlsView.layer.cornerRadius = 20
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
+        self.navigationController?.interactivePopGestureRecognizer?.delegate = nil
+        
+        closeButton.layer.cornerRadius = closeButtonCornerRadius
+        playbackControlsView.layer.cornerRadius = playbackControlsViewCornerRadius
         updateLayoutOfContainerView()
     }
 
@@ -123,7 +124,7 @@ class VideoViewController: UIViewController {
         let height = self.view.frame.height
 
         if width < height {     // portrait mode
-            let newHeight = width / 16 * 9
+            let newHeight = width / containerViewAspect
             containerView.snp.remakeConstraints { make in
                 make.leading.equalToSuperview()
                 make.trailing.equalToSuperview()
@@ -131,7 +132,7 @@ class VideoViewController: UIViewController {
                 make.centerY.equalToSuperview()
             }
         } else {                // landscape mode
-            let newWidth = height / 9 * 16
+            let newWidth = height * containerViewAspect
             containerView.snp.remakeConstraints { make in
                 make.top.equalToSuperview()
                 make.bottom.equalToSuperview()
@@ -186,6 +187,10 @@ class VideoViewController: UIViewController {
     }
     
     // MARK: - IBActions
+    @IBAction func actionCloseButton(_ sender: UIButton) {
+        self.navigationController?.popViewController(animated: true)
+    }
+    
     @IBAction func togglePlay(_ sender: UIButton) {
         guard let player = player else { return }
         
@@ -227,10 +232,12 @@ class VideoViewController: UIViewController {
     }
     
     @IBAction func tapAction(_ sender: Any) {
-        if playbackControlsView.isHidden == false {
+        if playbackControlsView.isHidden == false && closeButton.isHidden == false {
             playbackControlsView.isHidden = true
+            closeButton.isHidden = true
         } else {
             playbackControlsView.isHidden = false
+            closeButton.isHidden = false
         }
     }
     
