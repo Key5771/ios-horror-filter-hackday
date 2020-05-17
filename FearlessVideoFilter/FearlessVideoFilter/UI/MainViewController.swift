@@ -19,6 +19,7 @@ class MainViewController: UIViewController {
     
     // api를 통해 받아온 데이터를 저장하는 배열
     var infoArr: [Clip] = []
+    var filterArr: [Filter] = []
     var hasNext: Bool = true
     var page: Int = 1
     
@@ -32,14 +33,15 @@ class MainViewController: UIViewController {
         collectionView.register(nibName, forCellWithReuseIdentifier: "VideoCollectionViewCell")
         
         
-        // TODO: - hasNext == true인 경우 구현해야 함. cell이 마지막까지 스크롤 됐을 때 실행할 예정.
+        // TODO: - 함수로 분리하면 어떨까.
         NetworkRequest.shared.requestVideoInfo(api: .videoInfo, method: .get) { (response) in
             // 현재 infoArr에 저장되는 부분이 늦게 실행되기 때문에 reloadData()를 해주어야 셀에서 표현가능
             if let next = response.hasNext {
                 self.hasNext = next
             }
-            guard let data = response.clips else { return }
-            self.infoArr = data
+            if let data = response.clips {
+                self.infoArr = data
+            }
             self.collectionView.reloadData()
         }
     }
@@ -60,19 +62,7 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDataSo
     // prefetch함수를 이용해 hasNext가 true이면 다음 페이지의 데이터를 요청.
     // TODO: - 미리 불러올 수 있도록 인덱스 설정을 해주어야 할 듯.
     func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
-        if hasNext == true {
-            page += 1
-            let params: Parameters = ["page":String(page)]
-            NetworkRequest.shared
-                .requestVideoInfo(api: .videoInfo, method: .get, parameters: params, encoding: URLEncoding.queryString) { (response) in
-                    if let has = response.hasNext {
-                        self.hasNext = has
-                    }
-                    guard let data = response.clips else { return }
-                    self.infoArr.append(contentsOf: data)
-                    self.collectionView.reloadData()
-            }
-        }
+        dataLoad(indexPaths: indexPaths)
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -83,17 +73,17 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDataSo
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "VideoCollectionViewCell", for: indexPath) as? VideoCollectionViewCell else {
             return UICollectionViewCell()
         }
+        dataLoad(indexPaths: [indexPath])
         
-        let infoData = infoArr[indexPath.row]
+        let infoData = infoArr[indexPath.item]
         
         // thumbnailUrl을 호출할 때, ?type=f480을 호출하기 위한 변수
         if let thumbnailUrl = infoData.thumbnailUrl {
-//            print("thumbnailUrl: \(thumbnailUrl)")
             cell.thumbnailImageView.sd_setImage(with: URL(string: thumbnailUrl + "?type=f480"))
         }
         
         // channelEmblemUrl을 호출할 때, ?type=f200을 호출하기 위한 변수
-//        let channelEmblemUrl = infoArr[indexPath.row].channelEmblemUrl + "?type=f200"
+//        let channelEmblemUrl = infoArr[indexPath.item].channelEmblemUrl + "?type=f200"
         
         cell.titleLabel.text = infoData.title
         
@@ -118,6 +108,26 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDataSo
         
         return cell
     }
+    
+    // prefetch에서 계속해서 호출하는 것을 방지하기 위해 hasNext를 false로 변경
+    // cellForItem 함수와 prefetch 함수에서 호출할 수 있도록 함수로 분리
+    func dataLoad(indexPaths: [IndexPath]) {
+        guard let lastIndex = indexPaths.last?.item else { return }
+        if lastIndex > infoArr.count - 4 {
+            if hasNext == true {
+                page += 1
+                let params: Parameters = ["page":String(page)]
+                NetworkRequest.shared
+                    .requestVideoInfo(api: .videoInfo, method: .get, parameters: params, encoding: URLEncoding.queryString) { (response) in
+                        if let data = response.clips {
+                            self.infoArr.append(contentsOf: data)
+                        }
+                        self.collectionView.reloadData()
+                }
+                hasNext = false
+            }
+        }
+    }
 }
 
 extension MainViewController: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
@@ -127,25 +137,15 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDelegate
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let infoData = dummyArr[indexPath.row]
-        let videoName = getURL(infoData.videoName)
-        if let videoURL = Bundle.main.url(forResource: videoName[0], withExtension: videoName[1]) {
-            // 블러처리 해주는 기초적인 클래스 구현 - 현재는 한 구간만 블러 가능
-            let filteredItem = FilteredPlayerItem(videoURL: videoURL)
-            
-            // 블러 시작구간을 start, 끝구간을 end로 설정
-            guard let start = Double(infoData.start),
-                let end = Double(infoData.end) else { return }
-            
-            filteredItem.blur(from: start, to: end, animationRate: 1.0)
-            let player = AVPlayer(playerItem: filteredItem.playerItem)
-            
-            let controller = AVPlayerViewController()
-            controller.player = player
-
-            present(controller, animated: true) {
-                player.play()
-            }
+        let infoData = infoArr[indexPath.item]
+        guard let clipno = infoData.clipNo else { return }
+        let params: Parameters = ["clipNo":String(clipno)]
+        NetworkRequest.shared
+            .requestFilterInfo(api: .filterInfo, method: .get, parameters: params, encoding: URLEncoding.queryString) { (response) in
+                print("response: \(String(describing: response.filters))")
+                if let filters = response.filters {
+                    self.filterArr = filters
+                }
         }
     }
 }
