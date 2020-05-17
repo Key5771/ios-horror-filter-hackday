@@ -8,6 +8,33 @@
 
 import Foundation
 
+// MARK: - ListAPI
+struct APIStruct: Codable {
+    let header: Header
+    let body: Body
+}
+
+struct Header: Codable {
+    let code: Int?
+    let message: String?
+}
+
+struct Body: Codable {
+    let clips: [Clip]?
+    let hasNext: Bool?
+}
+
+struct Clip: Codable {
+    let clipNo: Int?
+    let title: String?
+    let thumbnailUrl: String?
+    let channelEmblemUrl: String?
+    let channelName: String?
+    let duration: Int?
+}
+
+
+// MARK: - JSON Data
 class VideoInfo: Decodable {
     var thumbnailName: String
     var videoName: String
