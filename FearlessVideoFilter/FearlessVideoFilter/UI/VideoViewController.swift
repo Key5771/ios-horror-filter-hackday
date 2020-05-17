@@ -33,15 +33,8 @@ class VideoViewController: UIViewController {
     // MARK: - Variables
 //    var asset: AVAsset?
     var playerItem: AVPlayerItem?
-    private var player: AVPlayer? {
-        didSet {
-            if let item = self.player?.currentItem {
-                durationSeconds = Float(item.duration.seconds)
-            }
-        }
-    }
+    private var player: AVPlayer?
     private var playerLayer: AVPlayerLayer?
-    private var durationSeconds: Float = 0.0
     
     // observer 관련 변수
     private var timeObserverToken: Any?
@@ -57,7 +50,7 @@ class VideoViewController: UIViewController {
     @IBOutlet weak var stepBackwardButton: UIButton!
     @IBOutlet weak var playPauseButton: UIButton!
     @IBOutlet weak var stepForwardButton: UIButton!
-    @IBOutlet weak var startTimeLabel: UILabel!
+    @IBOutlet weak var elapsedTimeLabel: UILabel!
     @IBOutlet weak var remainingTimeLabel: UILabel!
     @IBOutlet weak var timeSlider: UISlider!
     
@@ -97,6 +90,7 @@ class VideoViewController: UIViewController {
         }
         
         super.viewWillDisappear(animated)
+        self.navigationController?.setNavigationBarHidden(false, animated: false)
     }
     
     // MARK: - Setup
@@ -147,7 +141,8 @@ class VideoViewController: UIViewController {
     
     // MARK: - Key-Value Observing
     private func setupPlayerObservers() {
-        guard let player = player else { return }
+        guard let player = player,
+            let currentItem = player.currentItem else { return }
         
         playerTimeControlStatusObserver = player.observe(\AVPlayer.timeControlStatus,
                                                          options: [.initial, .new]) { [unowned self] _, _ in
@@ -160,19 +155,20 @@ class VideoViewController: UIViewController {
         timeObserverToken = player.addPeriodicTimeObserver(forInterval: interval,
                                                            queue: .main) { [unowned self] time in
             let timeElapsed = Float(time.seconds)
+            let durationSeconds = Float(currentItem.duration.seconds)
             self.timeSlider.value = timeElapsed
-            self.startTimeLabel.text = self.createTimeString(time: timeElapsed)
-            self.remainingTimeLabel.text = self.createTimeString(time: timeElapsed - self.durationSeconds)
+            self.elapsedTimeLabel.text = self.createTimeString(time: timeElapsed)
+            self.remainingTimeLabel.text = self.createTimeString(time: timeElapsed - durationSeconds)
         }
         
-        playerItemStepForwardObserver = player.observe(\AVPlayer.currentItem?.canPlayFastForward,
+        playerItemStepForwardObserver = player.observe(\AVPlayer.currentItem?.canStepForward,
                                                        options: [.new, .initial]) { [unowned self] player, _ in
             DispatchQueue.main.async {
                 self.stepForwardButton.isEnabled = player.currentItem?.canStepForward ?? false
             }
         }
         
-        playerItemStepBackwardObserver = player.observe(\AVPlayer.currentItem?.canPlayReverse,
+        playerItemStepBackwardObserver = player.observe(\AVPlayer.currentItem?.canStepBackward,
                                                    options: [.new, .initial]) { [unowned self] player, _ in
             DispatchQueue.main.async {
                 self.stepBackwardButton.isEnabled = player.currentItem?.canStepBackward ?? false
@@ -309,7 +305,7 @@ class VideoViewController: UIViewController {
         case .failed:
             playPauseButton.isEnabled = false
             timeSlider.isEnabled = false
-            startTimeLabel.isEnabled = false
+            elapsedTimeLabel.isEnabled = false
             remainingTimeLabel.isEnabled = false
             handleErrorWithMessage(currentItem.error?.localizedDescription ?? "", error: currentItem.error)
             
@@ -324,15 +320,15 @@ class VideoViewController: UIViewController {
             timeSlider.maximumValue = newDurationSeconds
             timeSlider.value = currentTime
             timeSlider.isEnabled = true
-            startTimeLabel.isEnabled = true
-            startTimeLabel.text = createTimeString(time: currentTime)
+            elapsedTimeLabel.isEnabled = true
+            elapsedTimeLabel.text = createTimeString(time: currentTime)
             remainingTimeLabel.isEnabled = true
-            remainingTimeLabel.text = createTimeString(time: newDurationSeconds)
+            remainingTimeLabel.text = createTimeString(time: -newDurationSeconds)
             
         default:
             playPauseButton.isEnabled = false
             timeSlider.isEnabled = false
-            startTimeLabel.isEnabled = false
+            elapsedTimeLabel.isEnabled = false
             remainingTimeLabel.isEnabled = false
         }
     }

@@ -198,10 +198,10 @@
                     <connections>
                         <outlet property="closeButton" destination="Alz-zh-DwI" id="gvg-fz-1oP"/>
                         <outlet property="containerView" destination="fnN-jq-Bk2" id="hpD-mb-vno"/>
+                        <outlet property="elapsedTimeLabel" destination="oQI-KS-nDw" id="wWo-jt-hoc"/>
                         <outlet property="playPauseButton" destination="JOQ-nI-tX0" id="eN3-QW-evK"/>
                         <outlet property="playbackControlsView" destination="dCi-51-uyr" id="25i-ia-RfG"/>
                         <outlet property="remainingTimeLabel" destination="Ygw-YN-1we" id="x10-t3-SLN"/>
-                        <outlet property="startTimeLabel" destination="oQI-KS-nDw" id="PbG-dp-aqM"/>
                         <outlet property="stepBackwardButton" destination="eMn-sH-sqr" id="TUT-4v-ztf"/>
                         <outlet property="stepForwardButton" destination="NsT-7G-kAw" id="OZd-8l-eiv"/>
                         <outlet property="timeSlider" destination="AFC-le-baQ" id="zkY-Z2-bjB"/>
