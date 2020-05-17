@@ -18,40 +18,49 @@
                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 <subviews>
                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="1TR-Xd-LoT">
-                        <rect key="frame" x="0.5" y="0.5" width="199" height="100"/>
+                        <rect key="frame" x="0.5" y="0.5" width="199" height="94"/>
                     </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2Yv-Qq-dqo">
-                        <rect key="frame" x="5" y="105.5" width="43.5" height="20.5"/>
+                        <rect key="frame" x="50" y="99.5" width="145" height="20.5"/>
                         <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5FY-jq-aCD">
-                        <rect key="frame" x="5" y="129.5" width="31" height="15.5"/>
+                        <rect key="frame" x="50" y="123.5" width="31" height="21.5"/>
                         <fontDescription key="fontDescription" style="UICTFontTextStyleCaption1"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="joC-uk-aQ5">
+                        <rect key="frame" x="5" y="99.5" width="40" height="45.5"/>
+                    </imageView>
                 </subviews>
             </view>
             <constraints>
                 <constraint firstAttribute="bottom" secondItem="5FY-jq-aCD" secondAttribute="bottom" constant="5" id="70t-3t-zpg"/>
+                <constraint firstAttribute="trailing" secondItem="2Yv-Qq-dqo" secondAttribute="trailing" constant="5" id="8K7-ZV-VSb"/>
                 <constraint firstItem="1TR-Xd-LoT" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="0.5" id="9Uz-jO-SiF"/>
-                <constraint firstItem="1TR-Xd-LoT" firstAttribute="bottom" secondItem="gTV-IL-0wX" secondAttribute="bottom" priority="999" constant="-49.5" id="S5G-sh-HnU"/>
+                <constraint firstItem="2Yv-Qq-dqo" firstAttribute="leading" secondItem="joC-uk-aQ5" secondAttribute="trailing" constant="5" id="Aej-b3-xkd"/>
+                <constraint firstItem="1TR-Xd-LoT" firstAttribute="bottom" secondItem="gTV-IL-0wX" secondAttribute="bottom" constant="-55.5" id="S5G-sh-HnU"/>
                 <constraint firstItem="5FY-jq-aCD" firstAttribute="top" secondItem="2Yv-Qq-dqo" secondAttribute="bottom" constant="3.5" id="YHK-Jo-REB"/>
-                <constraint firstItem="2Yv-Qq-dqo" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="5" id="eqD-lR-fYV"/>
+                <constraint firstItem="2Yv-Qq-dqo" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="50" id="eqD-lR-fYV"/>
+                <constraint firstItem="joC-uk-aQ5" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="5" id="lx8-rU-eaf"/>
                 <constraint firstItem="1TR-Xd-LoT" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="0.5" id="noj-41-NgR"/>
                 <constraint firstAttribute="trailing" secondItem="1TR-Xd-LoT" secondAttribute="trailing" constant="0.5" id="o80-zP-Tlu"/>
+                <constraint firstItem="joC-uk-aQ5" firstAttribute="top" secondItem="1TR-Xd-LoT" secondAttribute="bottom" constant="5" id="oVL-Ti-OSO"/>
                 <constraint firstItem="2Yv-Qq-dqo" firstAttribute="top" secondItem="1TR-Xd-LoT" secondAttribute="bottom" constant="5" id="qiW-Of-s7C"/>
-                <constraint firstItem="5FY-jq-aCD" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="5" id="upR-wK-sn8"/>
+                <constraint firstItem="5FY-jq-aCD" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="50" id="upR-wK-sn8"/>
+                <constraint firstAttribute="bottom" secondItem="joC-uk-aQ5" secondAttribute="bottom" constant="5" id="x9b-Me-Hga"/>
             </constraints>
             <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
             <connections>
+                <outlet property="channelEmblemImageView" destination="joC-uk-aQ5" id="gl7-Jd-bFF"/>
                 <outlet property="thumbnailImageView" destination="1TR-Xd-LoT" id="tgl-8x-Ihz"/>
                 <outlet property="titleLabel" destination="2Yv-Qq-dqo" id="gFb-Ue-p86"/>
                 <outlet property="videoLengthLabel" destination="5FY-jq-aCD" id="mfk-Ep-wBf"/>
             </connections>
-            <point key="canvasLocation" x="139" y="104"/>
+            <point key="canvasLocation" x="137.68115942028987" y="103.79464285714285"/>
         </collectionViewCell>
     </objects>
 </document>

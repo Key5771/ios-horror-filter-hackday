@@ -32,8 +32,6 @@ class MainViewController: UIViewController {
         let nibName = UINib(nibName: "VideoCollectionViewCell", bundle: nil)
         collectionView.register(nibName, forCellWithReuseIdentifier: "VideoCollectionViewCell")
         
-        
-        // TODO: - 함수로 분리하면 어떨까.
         NetworkRequest.shared.requestVideoInfo(api: .videoInfo, method: .get) { (response) in
             // 현재 infoArr에 저장되는 부분이 늦게 실행되기 때문에 reloadData()를 해주어야 셀에서 표현가능
             if let next = response.hasNext {
@@ -83,7 +81,9 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDataSo
         }
         
         // channelEmblemUrl을 호출할 때, ?type=f200을 호출하기 위한 변수
-//        let channelEmblemUrl = infoArr[indexPath.item].channelEmblemUrl + "?type=f200"
+        if let channelEmblemUrl = infoData.channelEmblemUrl {
+            cell.channelEmblemImageView.sd_setImage(with: URL(string: channelEmblemUrl + "?type=f200"))
+        }
         
         cell.titleLabel.text = infoData.title
         
@@ -102,7 +102,9 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDataSo
                 } else {
                     formatter.dateFormat = "mm:ss"
                 }
-                cell.videoLengthLabel.text = formatter.string(from: date)
+                if let channelName = infoData.channelName {
+                    cell.videoLengthLabel.text = channelName + " • " + formatter.string(from: date)
+                }
             }
         }
         
@@ -116,7 +118,7 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDataSo
         if lastIndex > infoArr.count - 4 {
             if hasNext == true {
                 page += 1
-                let params: Parameters = ["page":String(page)]
+                let params: Parameters = ["page": String(page)]
                 NetworkRequest.shared
                     .requestVideoInfo(api: .videoInfo, method: .get, parameters: params, encoding: URLEncoding.queryString) { (response) in
                         if let data = response.clips {
@@ -132,14 +134,14 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDataSo
 
 extension MainViewController: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width = collectionView.frame.width / 2 - 5.0
+        let width = collectionView.frame.width - 10
         return CGSize(width: width, height: width * 0.75)
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let infoData = infoArr[indexPath.item]
         guard let clipno = infoData.clipNo else { return }
-        let params: Parameters = ["clipNo":String(clipno)]
+        let params: Parameters = ["clipNo": String(clipno)]
         NetworkRequest.shared
             .requestFilterInfo(api: .filterInfo, method: .get, parameters: params, encoding: URLEncoding.queryString) { (response) in
                 print("response: \(String(describing: response.filters))")
