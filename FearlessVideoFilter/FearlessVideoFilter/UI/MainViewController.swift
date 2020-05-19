@@ -152,4 +152,3 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDelegate
         }
     }
 }
-
