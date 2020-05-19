@@ -24,7 +24,14 @@ class FilteredPlayerItem: NSObject {
         self.playerItem = AVPlayerItem(asset: self.asset)
     }
     
-    func blur(from start: Double, to end: Double, animationRate: Double) {
+    convenience init(videoURL: URL, filterArray: [Filter], animationRate: Double) {
+        self.init(videoURL: videoURL)
+        self.blur(filterArray: filterArray, animationRate: animationRate)
+    }
+    
+    func blur(filterArray: [Filter], animationRate: Double) {
+        if filterArray.isEmpty { return }
+        
         let blurParam = blurIntensity / animationRate
         
         let filter = CIFilter(name: "CIGaussianBlur")!
@@ -35,13 +42,15 @@ class FilteredPlayerItem: NSObject {
             
             // 비디오 타이밍에 따라 필터 파라미터가 달라짐
             let seconds = CMTimeGetSeconds(request.compositionTime)
-            if seconds < start {
-                filter.setValue(0, forKey: kCIInputRadiusKey)
-            } else if seconds < start + animationRate {
-                filter.setValue((seconds-start) * blurParam, forKey: kCIInputRadiusKey)
-            } else if seconds > end - animationRate {
-                filter.setValue((end - seconds) * blurParam, forKey: kCIInputRadiusKey)
-            } else if seconds > end {
+            if let (start, end) = self.filteringSection(at: seconds, of: filterArray) {
+                if seconds < start + animationRate {
+                    filter.setValue((seconds-start) * blurParam, forKey: kCIInputRadiusKey)
+                } else if seconds < end - animationRate {
+                    filter.setValue(self.blurIntensity, forKey: kCIInputRadiusKey)
+                } else if seconds < end {
+                    filter.setValue((end - seconds) * blurParam, forKey: kCIInputRadiusKey)
+                }
+            } else {
                 filter.setValue(0, forKey: kCIInputRadiusKey)
             }
                     
@@ -53,5 +62,16 @@ class FilteredPlayerItem: NSObject {
         })
         
         self.playerItem.videoComposition = composition
+    }
+    
+    private func filteringSection(at seconds: Double, of filterArray: [Filter]) -> (Double, Double)? {
+        for item in filterArray {
+            guard let start = item.startPosition,
+                let end = item.endPosition else { return nil }
+            if seconds > Double(start) && seconds < Double(end) {
+                return (Double(start), Double(end))
+            }
+        }
+        return nil
     }
 }
