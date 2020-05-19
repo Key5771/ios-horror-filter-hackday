@@ -149,6 +149,14 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDelegate
                 if let filters = response.filters {
                     self.filterArr = filters
                 }
+                
+                let videoName = self.getURL(self.dummyArr[0].videoName)
+                if let videoURL = Bundle.main.url(forResource: videoName[0], withExtension: videoName[1]),
+                    let controller = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "VideoViewController") as? VideoViewController {
+                    let filteredItem = FilteredPlayerItem(videoURL: videoURL, filterArray: self.filterArr, animationRate: 1.0)
+                    controller.playerItem = filteredItem.playerItem
+                    self.navigationController?.pushViewController(controller, animated: false)
+                }
         }
     }
 }

@@ -24,11 +24,9 @@ class FilteredPlayerItem: NSObject {
         self.playerItem = AVPlayerItem(asset: self.asset)
     }
     
-    init(videoURL: URL, filterArray: [Filter], animationRate: Double) {
-        self.videoURL = videoURL
-        self.asset = AVAsset(url: videoURL)
-        self.playerItem = AVPlayerItem(asset: self.asset)
-        blur(filterArray: filterArray, animationRate: animationRate)
+    convenience init(videoURL: URL, filterArray: [Filter], animationRate: Double) {
+        self.init(videoURL: videoURL)
+        self.blur(filterArray: filterArray, animationRate: animationRate)
     }
     
     func blur(filterArray: [Filter], animationRate: Double) {
