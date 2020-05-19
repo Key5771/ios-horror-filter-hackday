@@ -3,40 +3,30 @@
         "thumbnailName": "samsara_room_1_thumbnail.png",
         "videoName": "samsara_room_1.mov",
         "title": "samsara room 1",
-        "videoLength": "05:02",
-        "start": "10",
-        "end": "20"
+        "videoLength": "05:02"
     },
     {
         "thumbnailName": "samsara_room_2_thumbnail.png",
         "videoName": "samsara_room_2.mov",
         "title": "samsara room 2",
-        "videoLength": "04:09",
-        "start": "20",
-        "end": "30"
+        "videoLength": "04:09"
     },
     {
         "thumbnailName": "samsara_room_3_thumbnail.png",
         "videoName": "samsara_room_3.mov",
         "title": "samsara room 3",
-        "videoLength": "06:34",
-        "start": "15",
-        "end": "30"
+        "videoLength": "06:34"
     },
     {
         "thumbnailName": "dorothy_1_thumbnail.png",
         "videoName": "dorothy_1.mov",
         "title": "dorothy 1",
-        "videoLength": "04:35",
-        "start": "25",
-        "end": "30"
+        "videoLength": "04:35"
     },
     {
         "thumbnailName": "dorothy_2_thumbnail.png",
         "videoName": "dorothy_2.mov",
         "title": "dorothy 2",
-        "videoLength": "04:01",
-        "start": "100",
-        "end": "110"
+        "videoLength": "04:01"
     }
 ]

@@ -8,21 +8,44 @@
 
 import Foundation
 
+// MARK: - ListAPI
+struct APIStruct: Codable {
+    let header: Header
+    let body: Body
+}
+
+struct Header: Codable {
+    let code: Int?
+    let message: String?
+}
+
+struct Body: Codable {
+    let clips: [Clip]?
+    let hasNext: Bool?
+}
+
+struct Clip: Codable {
+    let clipNo: Int?
+    let title: String?
+    let thumbnailUrl: String?
+    let channelEmblemUrl: String?
+    let channelName: String?
+    let duration: Int?
+}
+
+
+// MARK: - JSON Data
 class VideoInfo: Decodable {
     var thumbnailName: String
     var videoName: String
     var title: String
     var videoLength: String
-    var start: String
-    var end: String
     
-    init(thumbnailName: String, videoName: String, title: String, videoLength: String, start: String, end: String) {
+    init(thumbnailName: String, videoName: String, title: String, videoLength: String) {
         self.thumbnailName = thumbnailName
         self.videoName = videoName
         self.title = title
         self.videoLength = videoLength
-        self.start = start
-        self.end = end
     }
     
     static func makeDummyData() -> [VideoInfo] {

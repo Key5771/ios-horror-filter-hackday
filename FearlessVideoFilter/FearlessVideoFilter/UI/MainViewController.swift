@@ -9,20 +9,39 @@
 import UIKit
 import AVFoundation
 import AVKit
+import Alamofire
+import SDWebImage
 
 class MainViewController: UIViewController {
     @IBOutlet weak var collectionView: UICollectionView!
     
     let dummyArr: [VideoInfo] = VideoInfo.makeDummyData()
     
+    // api를 통해 받아온 데이터를 저장하는 배열
+    var infoArr: [Clip] = []
+    var filterArr: [Filter] = []
+    var hasNext: Bool = true
+    var page: Int = 1
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         collectionView.delegate = self
         collectionView.dataSource = self
+        collectionView.prefetchDataSource = self
         
         let nibName = UINib(nibName: "VideoCollectionViewCell", bundle: nil)
         collectionView.register(nibName, forCellWithReuseIdentifier: "VideoCollectionViewCell")
         
+        NetworkRequest.shared.requestVideoInfo(api: .videoInfo, method: .get) { (response) in
+            // 현재 infoArr에 저장되는 부분이 늦게 실행되기 때문에 reloadData()를 해주어야 셀에서 표현가능
+            if let next = response.hasNext {
+                self.hasNext = next
+            }
+            if let data = response.clips {
+                self.infoArr = data
+            }
+            self.collectionView.reloadData()
+        }
     }
     
     // 화면 회전 시 cell size가 업데이트되지 않는 현상 방지
@@ -37,64 +56,98 @@ class MainViewController: UIViewController {
     }
 }
 
-extension MainViewController: UICollectionViewDataSource {
+extension MainViewController: UICollectionViewDataSource, UICollectionViewDataSourcePrefetching {
+    // prefetch함수를 이용해 hasNext가 true이면 다음 페이지의 데이터를 요청.
+    // TODO: - 미리 불러올 수 있도록 인덱스 설정을 해주어야 할 듯.
+    func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
+        dataLoad(indexPaths: indexPaths)
+    }
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return dummyArr.count
+        return infoArr.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "VideoCollectionViewCell", for: indexPath) as? VideoCollectionViewCell else {
             return UICollectionViewCell()
         }
+        dataLoad(indexPaths: [indexPath])
         
-        let infoData = dummyArr[indexPath.row]
+        let infoData = infoArr[indexPath.item]
         
-        let imageURL = getURL(dummyArr[indexPath.row].thumbnailName)
+        // thumbnailUrl을 호출할 때, ?type=f480을 호출하기 위한 변수
+        if let thumbnailUrl = infoData.thumbnailUrl {
+            cell.thumbnailImageView.sd_setImage(with: URL(string: thumbnailUrl + "?type=f480"))
+        }
         
-        do {
-            if let thumbnailURL = Bundle.main.url(forResource: imageURL[0], withExtension: imageURL[1]) {
-                let data = try Data(contentsOf: thumbnailURL)
-                cell.thumbnailImageView.image = UIImage(data: data)
-            }
-        } catch let err {
-             print("Error : \(err.localizedDescription)")
+        // channelEmblemUrl을 호출할 때, ?type=f200을 호출하기 위한 변수
+        if let channelEmblemUrl = infoData.channelEmblemUrl {
+            cell.channelEmblemImageView.sd_setImage(with: URL(string: channelEmblemUrl + "?type=f200"))
         }
         
         cell.titleLabel.text = infoData.title
-        cell.videoLengthLabel.text = infoData.videoLength
+        
+        if let duration = infoData.duration {
+            let minute: Int = duration / 60
+            let seconds: Int = duration % 60
+            
+            // 초 단위로 이루어진 duration을 시, 분, 초 단위로 분리.
+            var component = DateComponents()
+            component.setValue(minute, for: .minute)
+            component.setValue(seconds, for: .second)
+            if let date = Calendar.current.date(from: component) {
+                let formatter = DateFormatter()
+                if minute > 60 {
+                    formatter.dateFormat = "HH:mm:ss"
+                } else {
+                    formatter.dateFormat = "mm:ss"
+                }
+                if let channelName = infoData.channelName {
+                    cell.videoLengthLabel.text = channelName + " • " + formatter.string(from: date)
+                }
+            }
+        }
         
         return cell
+    }
+    
+    // prefetch에서 계속해서 호출하는 것을 방지하기 위해 hasNext를 false로 변경
+    // cellForItem 함수와 prefetch 함수에서 호출할 수 있도록 함수로 분리
+    func dataLoad(indexPaths: [IndexPath]) {
+        guard let lastIndex = indexPaths.last?.item else { return }
+        if lastIndex > infoArr.count - 4 {
+            if hasNext == true {
+                page += 1
+                let params: Parameters = ["page": String(page)]
+                NetworkRequest.shared
+                    .requestVideoInfo(api: .videoInfo, method: .get, parameters: params, encoding: URLEncoding.queryString) { (response) in
+                        if let data = response.clips {
+                            self.infoArr.append(contentsOf: data)
+                        }
+                        self.collectionView.reloadData()
+                }
+                hasNext = false
+            }
+        }
     }
 }
 
 extension MainViewController: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width = collectionView.frame.width / 2 - 5.0
+        let width = collectionView.frame.width - 10
         return CGSize(width: width, height: width * 0.75)
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-//        let infoData = dummyArr[indexPath.row]
-        let videoName = getURL(dummyArr[indexPath.row].videoName)
-        if let videoURL = Bundle.main.url(forResource: videoName[0], withExtension: videoName[1]) {
-            // 블러처리 해주는 기초적인 클래스 구현 - 현재는 한 구간만 블러 가능
-            let filteredItem = FilteredPlayerItem(videoURL: videoURL)
-            
-            // 블러 시작구간을 start, 끝구간을 end로 설정
-            guard let start = Double(dummyArr[indexPath.row].start),
-                let end = Double(dummyArr[indexPath.row].end) else { return }
-            
-            filteredItem.blur(from: start, to: end, animationRate: 1.0)
-            let player = AVPlayer(playerItem: filteredItem.playerItem)
-            
-//            let player = AVPlayer(url: videoURL)
-            
-            let controller = AVPlayerViewController()
-            controller.player = player
-
-            present(controller, animated: true) {
-                player.play()
-            }
+        let infoData = infoArr[indexPath.item]
+        guard let clipno = infoData.clipNo else { return }
+        let params: Parameters = ["clipNo": String(clipno)]
+        NetworkRequest.shared
+            .requestFilterInfo(api: .filterInfo, method: .get, parameters: params, encoding: URLEncoding.queryString) { (response) in
+                print("response: \(String(describing: response.filters))")
+                if let filters = response.filters {
+                    self.filterArr = filters
+                }
         }
     }
 }
