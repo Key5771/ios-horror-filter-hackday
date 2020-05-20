@@ -152,8 +152,7 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDelegate
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let infoData = infoArr[indexPath.item]
-        guard let clipno = infoData.clipNo else { return }
+        guard let clipno = infoArr[indexPath.item].clipNo else { return }
         let params: Parameters = ["clipNo": String(clipno)]
         NetworkRequest.shared.requestVideoInfo(api: .filterInfo, method: .get, parameters: params, encoding: URLEncoding.queryString) { (response: FilterAPI) in
             guard let code = response.header.code else { return }

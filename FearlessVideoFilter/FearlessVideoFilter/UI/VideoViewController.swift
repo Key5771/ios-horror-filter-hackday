@@ -245,6 +245,13 @@ class VideoViewController: UIViewController {
         player?.seek(to: newTime, toleranceBefore: .zero, toleranceAfter: .zero)
     }
     
+    @IBAction func timeSliderDidCancelTouch(_ sender: UISlider) {
+        // timeSlider를 가볍게 탭했을 경우 TouchUpInside 대신에 TouchCancel이 호출됨
+        if previusStatusBeforeChangingSlider == .playing {
+            player?.play()
+        }
+    }
+    
     @IBAction func timeSiderDidFinishChanging(_ sender: UISlider) {
         if previusStatusBeforeChangingSlider == .playing {
             player?.play()
