@@ -12,12 +12,18 @@ import AVFoundation
 import SnapKit
 
 class VideoViewController: UIViewController {
+    static let closeButtonImageName = "SF_xmark_square_fill"
+    static let stepForwardButtonImageName = "SF_goforward_15"
+    static let stepBackwardButtonImageName = "SF_goforward_15"
     static let pauseButtonImageName = "SF_pause_circle_fill"
     static let playButtonImageName = "SF_play_circle_fill"
     
     // layout 관련 상수
     let closeButtonCornerRadius = CGFloat(10)
     let playbackControlsViewCornerRadius = CGFloat(15)
+    let buttonsImageWidth = CGFloat(25)
+    let buttonsImageHeight = CGFloat(25)
+    let buttonsTintColor = UIColor.white
     let containerViewAspect = CGFloat(16.0 / 9.0)
     
     // time 관련 상수
@@ -31,7 +37,6 @@ class VideoViewController: UIViewController {
     }()
     
     // MARK: - Variables
-//    var asset: AVAsset?
     var playerItem: AVPlayerItem?
     private var player: AVPlayer?
     private var playerLayer: AVPlayerLayer?
@@ -94,23 +99,26 @@ class VideoViewController: UIViewController {
     }
     
     // MARK: - Setup
+    private func prepareToPlay() {
+        player = AVPlayer(playerItem: playerItem)
+        setupPlayerObservers()
+    }
+    
     private func setupLayout() {
         self.navigationController?.setNavigationBarHidden(true, animated: false)
         self.navigationController?.interactivePopGestureRecognizer?.delegate = nil
         
         closeButton.layer.cornerRadius = closeButtonCornerRadius
         playbackControlsView.layer.cornerRadius = playbackControlsViewCornerRadius
-        updateLayoutOfContainerView()
-    }
-
-    private func prepareToPlay() {
-//        guard let asset = asset else { return }
-//
-//        playerItem = AVPlayerItem(asset: asset,
-//                                  automaticallyLoadedAssetKeys: assetKeysRequiredToPlay)
         
-        player = AVPlayer(playerItem: playerItem)
-        setupPlayerObservers()
+        let closeButtonImage = UIImage(named: VideoViewController.closeButtonImageName)
+        setButtonImage(with: closeButtonImage, of: closeButton)
+        let forwardButtonImage = UIImage(named: VideoViewController.stepForwardButtonImageName)
+        setButtonImage(with: forwardButtonImage, of: stepForwardButton)
+        let backwardButtonImage = UIImage(named: VideoViewController.stepBackwardButtonImageName)
+        setButtonImage(with: backwardButtonImage, of: stepBackwardButton)
+        
+        updateLayoutOfContainerView()
     }
     
     private func updateLayoutOfContainerView() {
@@ -283,11 +291,18 @@ class VideoViewController: UIViewController {
             buttonImage = UIImage(named: VideoViewController.pauseButtonImageName)
         }
         
-        guard let image = buttonImage else { return }
-        let templateImage = resizedImage(at: image, for: CGSize(width: 20, height: 20))
+        setButtonImage(with: buttonImage, of: playPauseButton)
+    }
+    
+    private func setButtonImage(with image: UIImage?, of button: UIButton) {
+        guard let image = image else { return }
+        
+        let templateImage = resizedImage(at: image,
+                                         for: CGSize(width: buttonsImageWidth,
+                                                     height: buttonsImageHeight))
             .withRenderingMode(.alwaysTemplate)
-        playPauseButton.setImage(templateImage, for: .normal)
-        playPauseButton.tintColor = UIColor.white
+        button.setImage(templateImage, for: .normal)
+        button.tintColor = buttonsTintColor
     }
     
     private func resizedImage(at image: UIImage, for size: CGSize) -> UIImage {
