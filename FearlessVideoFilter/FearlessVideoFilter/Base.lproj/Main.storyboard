@@ -135,6 +135,8 @@
                                         <rect key="frame" x="99" y="19.5" width="287" height="31"/>
                                         <color key="tintColor" systemColor="opaqueSeparatorColor" red="0.77647058820000003" green="0.77647058820000003" blue="0.7843137255" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <connections>
+                                            <action selector="timeSiderDidFinishChanging:" destination="JKy-8Y-Scq" eventType="touchUpInside" id="twf-Q8-Q5K"/>
+                                            <action selector="timeSliderDidBeginChanging:" destination="JKy-8Y-Scq" eventType="touchDown" id="iul-Mm-EGG"/>
                                             <action selector="timeSliderDidChange:" destination="JKy-8Y-Scq" eventType="valueChanged" id="gRz-nV-cd3"/>
                                         </connections>
                                     </slider>

@@ -40,6 +40,7 @@ class VideoViewController: UIViewController {
     var playerItem: AVPlayerItem?
     private var player: AVPlayer?
     private var playerLayer: AVPlayerLayer?
+    private var previusStatusBeforeChangingSlider: AVPlayer.TimeControlStatus = .paused
     
     // observer 관련 변수
     private var timeObserverToken: Any?
@@ -230,9 +231,24 @@ class VideoViewController: UIViewController {
         player.seek(to: forwardTime, toleranceBefore: .zero, toleranceAfter: .zero)
     }
     
+    @IBAction func timeSliderDidBeginChanging(_ sender: UISlider) {
+        if player?.timeControlStatus == .playing {
+            previusStatusBeforeChangingSlider = .playing
+            player?.pause()
+        } else {
+            previusStatusBeforeChangingSlider = .paused
+        }
+    }
+    
     @IBAction func timeSliderDidChange(_ sender: UISlider) {
         let newTime = CMTime(seconds: Double(sender.value), preferredTimescale: 600)
         player?.seek(to: newTime, toleranceBefore: .zero, toleranceAfter: .zero)
+    }
+    
+    @IBAction func timeSiderDidFinishChanging(_ sender: UISlider) {
+        if previusStatusBeforeChangingSlider == .playing {
+            player?.play()
+        }
     }
     
     @IBAction func tapAction(_ sender: Any) {
