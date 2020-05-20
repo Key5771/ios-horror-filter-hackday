@@ -124,27 +124,22 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDataSo
     
     // cellForItem 함수와 prefetch 함수에서 호출할 수 있도록 함수로 분리
     private func dataLoad(indexPaths: [IndexPath]) {
-        guard let lastIndex = indexPaths.last?.item else { return }
-        if lastIndex > infoArr.count - 4 {
-            if hasNext == true {
-                page += 1
-                let params: Parameters = ["page": String(page)]
-                NetworkRequest.shared
-                    .requestVideoInfo(api: .videoInfo, method: .get, parameters: params, encoding: URLEncoding.queryString) { (response: APIStruct) in
-                        guard let code = response.header.code else { return }
-                        if code == ResponseCode.success.rawValue {
-                            if let next = response.body.hasNext {
-                                self.hasNext = next
-                            }
-                            if let data = response.body.clips {
-                                self.infoArr.append(contentsOf: data)
-                            }
-                            self.collectionView.reloadData()
-                        } else if code == ResponseCode.failure.rawValue {
-                            print("Response Failure: code \(code)")
-                        }
+        guard let lastIndex = indexPaths.last?.item, lastIndex > infoArr.count - 4, hasNext == true else { return }
+        page += 1
+        let params: Parameters = ["page": String(page)]
+        NetworkRequest.shared.requestVideoInfo(api: .videoInfo, method: .get, parameters: params, encoding: URLEncoding.queryString) { (response: APIStruct) in
+                guard let code = response.header.code else { return }
+                if code == ResponseCode.success.rawValue {
+                    if let next = response.body.hasNext {
+                        self.hasNext = next
+                    }
+                    if let data = response.body.clips {
+                        self.infoArr.append(contentsOf: data)
+                    }
+                    self.collectionView.reloadData()
+                } else if code == ResponseCode.failure.rawValue {
+                    print("Response Failure: code \(code)")
                 }
-            }
         }
     }
 }
