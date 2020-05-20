@@ -32,12 +32,12 @@ class MainViewController: UIViewController {
         let nibName = UINib(nibName: "VideoCollectionViewCell", bundle: nil)
         collectionView.register(nibName, forCellWithReuseIdentifier: "VideoCollectionViewCell")
         
-        NetworkRequest.shared.requestVideoInfo(api: .videoInfo, method: .get) { (response) in
-            // 현재 infoArr에 저장되는 부분이 늦게 실행되기 때문에 reloadData()를 해주어야 셀에서 표현가능
-            if let next = response.hasNext {
+        NetworkRequest.shared.requestVideoInfo(api: .videoInfo, method: .get) { (response: APIStruct) in
+            let body = response.body
+            if let next = body.hasNext {
                 self.hasNext = next
             }
-            if let data = response.clips {
+            if let data = body.clips {
                 self.infoArr = data
             }
             self.collectionView.reloadData()
@@ -52,7 +52,7 @@ class MainViewController: UIViewController {
     
     // 파일의 이름과 확장자를 .으로 분리.
     // index 0에는 파일의 이름을 index 1에는 파일의 확장자를 저장하여 배열로 리턴.
-    func getURL(_ str: String) -> [String] {
+    private func getURL(_ str: String) -> [String] {
         return str.components(separatedBy: ".")
     }
 }
@@ -72,7 +72,6 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDataSo
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "VideoCollectionViewCell", for: indexPath) as? VideoCollectionViewCell else {
             return UICollectionViewCell()
         }
-        dataLoad(indexPaths: [indexPath])
         
         let infoData = infoArr[indexPath.item]
         
@@ -112,22 +111,23 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDataSo
         return cell
     }
     
-    // prefetch에서 계속해서 호출하는 것을 방지하기 위해 hasNext를 false로 변경
     // cellForItem 함수와 prefetch 함수에서 호출할 수 있도록 함수로 분리
-    func dataLoad(indexPaths: [IndexPath]) {
+    private func dataLoad(indexPaths: [IndexPath]) {
         guard let lastIndex = indexPaths.last?.item else { return }
         if lastIndex > infoArr.count - 4 {
             if hasNext == true {
                 page += 1
                 let params: Parameters = ["page": String(page)]
                 NetworkRequest.shared
-                    .requestVideoInfo(api: .videoInfo, method: .get, parameters: params, encoding: URLEncoding.queryString) { (response) in
-                        if let data = response.clips {
+                    .requestVideoInfo(api: .videoInfo, method: .get, parameters: params, encoding: URLEncoding.queryString) { (response: APIStruct) in
+                        if let next = response.body.hasNext {
+                            self.hasNext = next
+                        }
+                        if let data = response.body.clips {
                             self.infoArr.append(contentsOf: data)
                         }
                         self.collectionView.reloadData()
                 }
-                hasNext = false
             }
         }
     }
@@ -136,7 +136,8 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDataSo
 extension MainViewController: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let width = collectionView.frame.width - 10
-        return CGSize(width: width, height: width * 0.75)
+        let height = width * 9 / 16 + 55.5
+        return CGSize(width: width, height: height)
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -144,18 +145,18 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDelegate
         guard let clipno = infoData.clipNo else { return }
         let params: Parameters = ["clipNo": String(clipno)]
         NetworkRequest.shared
-            .requestFilterInfo(api: .filterInfo, method: .get, parameters: params, encoding: URLEncoding.queryString) { (response) in
-                print("response: \(String(describing: response.filters))")
-                if let filters = response.filters {
+            .requestVideoInfo(api: .filterInfo, method: .get, parameters: params, encoding: URLEncoding.queryString) { (response: FilterAPI) in
+                print("response: \(String(describing: response.body.filters))")
+                if let filters = response.body.filters {
                     self.filterArr = filters
-                }
-                
-                let videoName = self.getURL(self.dummyArr[0].videoName)
-                if let videoURL = Bundle.main.url(forResource: videoName[0], withExtension: videoName[1]),
-                    let controller = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "VideoViewController") as? VideoViewController {
-                    let filteredItem = FilteredPlayerItem(videoURL: videoURL, filterArray: self.filterArr, animationRate: 1.0)
-                    controller.playerItem = filteredItem.playerItem
-                    self.navigationController?.pushViewController(controller, animated: false)
+                    // #1
+                    let videoName = self.getURL(self.dummyArr[0].videoName)
+                    if let videoURL = Bundle.main.url(forResource: videoName[0], withExtension: videoName[1]),
+                        let controller = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "VideoViewController") as? VideoViewController {
+                        let filteredItem = FilteredPlayerItem(videoURL: videoURL, filterArray: self.filterArr, animationRate: 1.0)
+                        controller.playerItem = filteredItem.playerItem
+                        self.navigationController?.pushViewController(controller, animated: false)
+                    }
                 }
         }
     }

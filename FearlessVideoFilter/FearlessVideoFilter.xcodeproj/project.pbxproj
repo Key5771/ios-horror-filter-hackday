@@ -20,13 +20,8 @@
 		25F8B9C12463EA32005A4CC4 /* VideoCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25F8B9BF2463EA32005A4CC4 /* VideoCollectionViewCell.swift */; };
 		25F8B9C22463EA32005A4CC4 /* VideoCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 25F8B9C02463EA32005A4CC4 /* VideoCollectionViewCell.xib */; };
 		25F8B9DC2463FFD1005A4CC4 /* VideoInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25F8B9DB2463FFD1005A4CC4 /* VideoInfo.swift */; };
-		25F8B9E02464099F005A4CC4 /* samsara_room_2_thumbnail.png in Resources */ = {isa = PBXBuildFile; fileRef = 25F8B9DE2464099F005A4CC4 /* samsara_room_2_thumbnail.png */; };
-		25F8B9E12464099F005A4CC4 /* samsara_room_3_thumbnail.png in Resources */ = {isa = PBXBuildFile; fileRef = 25F8B9DF2464099F005A4CC4 /* samsara_room_3_thumbnail.png */; };
 		25F8B9EA24641547005A4CC4 /* dorothy_2.mov in Resources */ = {isa = PBXBuildFile; fileRef = 25F8B9E224641516005A4CC4 /* dorothy_2.mov */; };
 		25F8B9ED24641547005A4CC4 /* dorothy_1.mov in Resources */ = {isa = PBXBuildFile; fileRef = 25F8B9E524641534005A4CC4 /* dorothy_1.mov */; };
-		25F8B9EE24641547005A4CC4 /* dorothy_1_thumbnail.png in Resources */ = {isa = PBXBuildFile; fileRef = 25F8B9E624641537005A4CC4 /* dorothy_1_thumbnail.png */; };
-		25F8B9F024641547005A4CC4 /* dorothy_2_thumbnail.png in Resources */ = {isa = PBXBuildFile; fileRef = 25F8B9E824641544005A4CC4 /* dorothy_2_thumbnail.png */; };
-		25F8B9F124641547005A4CC4 /* samsara_room_1_thumbnail.png in Resources */ = {isa = PBXBuildFile; fileRef = 25F8B9E924641546005A4CC4 /* samsara_room_1_thumbnail.png */; };
 		25F8B9F424642D76005A4CC4 /* VideoInfoData.json in Resources */ = {isa = PBXBuildFile; fileRef = 25F8B9F324642D76005A4CC4 /* VideoInfoData.json */; };
 		25F8B9F82464359C005A4CC4 /* samsara_room_3.mov in Resources */ = {isa = PBXBuildFile; fileRef = 25F8B9F524643597005A4CC4 /* samsara_room_3.mov */; };
 		25F8B9F92464359C005A4CC4 /* samsara_room_1.mov in Resources */ = {isa = PBXBuildFile; fileRef = 25F8B9F62464359A005A4CC4 /* samsara_room_1.mov */; };
@@ -75,13 +70,8 @@
 		25F8B9BF2463EA32005A4CC4 /* VideoCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoCollectionViewCell.swift; sourceTree = "<group>"; };
 		25F8B9C02463EA32005A4CC4 /* VideoCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = VideoCollectionViewCell.xib; sourceTree = "<group>"; };
 		25F8B9DB2463FFD1005A4CC4 /* VideoInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoInfo.swift; sourceTree = "<group>"; };
-		25F8B9DE2464099F005A4CC4 /* samsara_room_2_thumbnail.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = samsara_room_2_thumbnail.png; sourceTree = "<group>"; };
-		25F8B9DF2464099F005A4CC4 /* samsara_room_3_thumbnail.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = samsara_room_3_thumbnail.png; sourceTree = "<group>"; };
 		25F8B9E224641516005A4CC4 /* dorothy_2.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = dorothy_2.mov; sourceTree = "<group>"; };
 		25F8B9E524641534005A4CC4 /* dorothy_1.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = dorothy_1.mov; sourceTree = "<group>"; };
-		25F8B9E624641537005A4CC4 /* dorothy_1_thumbnail.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = dorothy_1_thumbnail.png; sourceTree = "<group>"; };
-		25F8B9E824641544005A4CC4 /* dorothy_2_thumbnail.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = dorothy_2_thumbnail.png; sourceTree = "<group>"; };
-		25F8B9E924641546005A4CC4 /* samsara_room_1_thumbnail.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = samsara_room_1_thumbnail.png; sourceTree = "<group>"; };
 		25F8B9F324642D76005A4CC4 /* VideoInfoData.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = VideoInfoData.json; sourceTree = "<group>"; };
 		25F8B9F524643597005A4CC4 /* samsara_room_3.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = samsara_room_3.mov; sourceTree = "<group>"; };
 		25F8B9F62464359A005A4CC4 /* samsara_room_1.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = samsara_room_1.mov; sourceTree = "<group>"; };
@@ -200,16 +190,11 @@
 			isa = PBXGroup;
 			children = (
 				25F8B9F324642D76005A4CC4 /* VideoInfoData.json */,
-				25F8B9E624641537005A4CC4 /* dorothy_1_thumbnail.png */,
 				25F8B9E524641534005A4CC4 /* dorothy_1.mov */,
-				25F8B9E824641544005A4CC4 /* dorothy_2_thumbnail.png */,
 				25F8B9E224641516005A4CC4 /* dorothy_2.mov */,
 				25F8B9F62464359A005A4CC4 /* samsara_room_1.mov */,
 				25F8B9F72464359C005A4CC4 /* samsara_room_2.mov */,
 				25F8B9F524643597005A4CC4 /* samsara_room_3.mov */,
-				25F8B9E924641546005A4CC4 /* samsara_room_1_thumbnail.png */,
-				25F8B9DE2464099F005A4CC4 /* samsara_room_2_thumbnail.png */,
-				25F8B9DF2464099F005A4CC4 /* samsara_room_3_thumbnail.png */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -370,11 +355,6 @@
 				25F8B9EA24641547005A4CC4 /* dorothy_2.mov in Resources */,
 				25F8B9F424642D76005A4CC4 /* VideoInfoData.json in Resources */,
 				25F8B9ED24641547005A4CC4 /* dorothy_1.mov in Resources */,
-				25F8B9EE24641547005A4CC4 /* dorothy_1_thumbnail.png in Resources */,
-				25F8B9F024641547005A4CC4 /* dorothy_2_thumbnail.png in Resources */,
-				25F8B9F124641547005A4CC4 /* samsara_room_1_thumbnail.png in Resources */,
-				25F8B9E02464099F005A4CC4 /* samsara_room_2_thumbnail.png in Resources */,
-				25F8B9E12464099F005A4CC4 /* samsara_room_3_thumbnail.png in Resources */,
 				25F8B9962462C11B005A4CC4 /* LaunchScreen.storyboard in Resources */,
 				25F8B9932462C11B005A4CC4 /* Assets.xcassets in Resources */,
 				25F8B9C22463EA32005A4CC4 /* VideoCollectionViewCell.xib in Resources */,
