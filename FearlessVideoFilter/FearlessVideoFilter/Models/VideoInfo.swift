@@ -36,16 +36,10 @@ struct Clip: Codable {
 
 // MARK: - JSON Data
 class VideoInfo: Decodable {
-    var thumbnailName: String
     var videoName: String
-    var title: String
-    var videoLength: String
     
-    init(thumbnailName: String, videoName: String, title: String, videoLength: String) {
-        self.thumbnailName = thumbnailName
+    init(videoName: String) {
         self.videoName = videoName
-        self.title = title
-        self.videoLength = videoLength
     }
     
     static func makeDummyData() -> [VideoInfo] {

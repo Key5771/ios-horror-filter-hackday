@@ -10,13 +10,8 @@ import Foundation
 
 // MARK: - FilterAPI
 struct FilterAPI: Codable {
-    let header: FilterHeader
+    let header: Header
     let body: FilterBody
-}
-
-struct FilterHeader: Codable {
-    let code: Int?
-    let message: String?
 }
 
 struct FilterBody: Codable {

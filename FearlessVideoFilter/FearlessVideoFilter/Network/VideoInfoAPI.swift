@@ -25,29 +25,15 @@ class NetworkRequest {
     }
     
     // API 요청 함수.
-    func requestVideoInfo(api: API, method: Alamofire.HTTPMethod, parameters: Parameters? = nil, encoding: URLEncoding? = nil, completion handler: @escaping (Body) -> Void) {
+    // videoInfo와 filterInfo에서 같은 함수를 사용할 수 있도록 변경.
+    func requestVideoInfo<Response: Decodable>(api: API, method: Alamofire.HTTPMethod, parameters: Parameters? = nil, encoding: URLEncoding? = nil, completion handler: @escaping (Response) -> Void) {
         // responseDecodable
-        AF.request(baseUrl+api.rawValue, method: .get, parameters: parameters).responseDecodable(of: APIStruct.self) { (response) in
-            // TODO: - 이부분은 API와 맞추어 성공, 실패를 나누어야 할 듯.
+        AF.request(baseUrl+api.rawValue, method: .get, parameters: parameters).responseDecodable(of: Response.self) { (response) in
             switch response.result {
             case .success(let object):
-                let data = object.body
-                handler(data)
+                handler(object)
             case .failure(let error):
                 print("Failure Error: \(error)")
-            }
-        }
-    }
-    
-    // FilterAPI 요청 함수.
-    func requestFilterInfo(api: API, method: Alamofire.HTTPMethod, parameters: Parameters? = nil, encoding: URLEncoding? = nil, completion handler: @escaping (FilterBody) -> Void) {
-        AF.request(baseUrl+api.rawValue, method: .get, parameters: parameters).responseDecodable(of: FilterAPI.self) { (response) in
-            switch response.result {
-            case .success(let object):
-                let data = object.body
-                handler(data)
-            case .failure(let error):
-                print("Failure Error in FilterAPI: \(error)")
             }
         }
     }
