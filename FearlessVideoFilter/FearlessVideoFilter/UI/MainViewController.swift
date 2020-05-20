@@ -19,7 +19,6 @@ class MainViewController: UIViewController {
     
     // api를 통해 받아온 데이터를 저장하는 배열
     private var infoArr: [Clip] = []
-    private var filterArr: [Filter] = []
     private var hasNext: Bool = true
     private var page: Int = 1
     
@@ -161,23 +160,23 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDelegate
         let infoData = infoArr[indexPath.item]
         guard let clipno = infoData.clipNo else { return }
         let params: Parameters = ["clipNo": String(clipno)]
-        NetworkRequest.shared
-            .requestVideoInfo(api: .filterInfo, method: .get, parameters: params, encoding: URLEncoding.queryString) { (response: FilterAPI) in
-                guard let code = response.header.code else { return }
-                if code == ResponseCode.success.rawValue {
-                    if let filters = response.body.filters {
-                        self.filterArr = filters
-                        let videoName = self.getURL(self.dummyArr[0].videoName)
-                        if let videoURL = Bundle.main.url(forResource: videoName[0], withExtension: videoName[1]),
-                            let controller = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "VideoViewController") as? VideoViewController {
-                            let filteredItem = FilteredPlayerItem(videoURL: videoURL, filterArray: self.filterArr, animationRate: 1.0)
-                            controller.playerItem = filteredItem.playerItem
-                            self.navigationController?.pushViewController(controller, animated: false)
-                        }
-                    }
-                } else if code == ResponseCode.failure.rawValue {
-                    print("Response Failure: code \(code)")
-                }
+        NetworkRequest.shared.requestVideoInfo(api: .filterInfo, method: .get, parameters: params, encoding: URLEncoding.queryString) { (response: FilterAPI) in
+            guard let code = response.header.code else { return }
+            
+            if code == ResponseCode.success.rawValue {
+                let videoIndex = indexPath.row % self.dummyArr.count
+                let videoName = self.getURL(self.dummyArr[videoIndex].videoName)
+                guard let filters = response.body.filters,
+                    let videoURL = Bundle.main.url(forResource: videoName[0], withExtension: videoName[1]),
+                    let controller = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "VideoViewController") as? VideoViewController else { return }
+                
+                let filteredItem = FilteredPlayerItem(videoURL: videoURL, filterArray: filters, animationRate: 1.0)
+                controller.playerItem = filteredItem.playerItem
+                self.navigationController?.pushViewController(controller, animated: false)
+                
+            } else if code == ResponseCode.failure.rawValue {
+                print("Response Failure: code \(code)")
+            }
         }
     }
 }
