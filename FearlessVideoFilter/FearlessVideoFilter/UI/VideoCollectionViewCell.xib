@@ -21,13 +21,13 @@
                         <rect key="frame" x="0.5" y="0.5" width="199" height="94"/>
                     </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2Yv-Qq-dqo">
-                        <rect key="frame" x="50" y="99.5" width="145" height="20.5"/>
+                        <rect key="frame" x="50" y="104.5" width="145" height="20.5"/>
                         <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5FY-jq-aCD">
-                        <rect key="frame" x="50" y="123.5" width="31" height="21.5"/>
+                        <rect key="frame" x="50" y="128.5" width="31" height="16.5"/>
                         <fontDescription key="fontDescription" style="UICTFontTextStyleCaption1"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
@@ -49,7 +49,7 @@
                 <constraint firstItem="1TR-Xd-LoT" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="0.5" id="noj-41-NgR"/>
                 <constraint firstAttribute="trailing" secondItem="1TR-Xd-LoT" secondAttribute="trailing" constant="0.5" id="o80-zP-Tlu"/>
                 <constraint firstItem="joC-uk-aQ5" firstAttribute="top" secondItem="1TR-Xd-LoT" secondAttribute="bottom" constant="5" id="oVL-Ti-OSO"/>
-                <constraint firstItem="2Yv-Qq-dqo" firstAttribute="top" secondItem="1TR-Xd-LoT" secondAttribute="bottom" constant="5" id="qiW-Of-s7C"/>
+                <constraint firstItem="2Yv-Qq-dqo" firstAttribute="top" secondItem="1TR-Xd-LoT" secondAttribute="bottom" constant="10" id="qiW-Of-s7C"/>
                 <constraint firstItem="5FY-jq-aCD" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="50" id="upR-wK-sn8"/>
                 <constraint firstAttribute="bottom" secondItem="joC-uk-aQ5" secondAttribute="bottom" constant="5" id="x9b-Me-Hga"/>
             </constraints>

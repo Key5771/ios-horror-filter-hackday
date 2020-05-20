@@ -15,13 +15,20 @@ import SDWebImage
 class MainViewController: UIViewController {
     @IBOutlet weak var collectionView: UICollectionView!
     
-    let dummyArr: [VideoInfo] = VideoInfo.makeDummyData()
+    private let dummyArr: [VideoInfo] = VideoInfo.makeDummyData()
     
     // api를 통해 받아온 데이터를 저장하는 배열
-    var infoArr: [Clip] = []
-    var filterArr: [Filter] = []
-    var hasNext: Bool = true
-    var page: Int = 1
+    private var infoArr: [Clip] = []
+    private var filterArr: [Filter] = []
+    private var hasNext: Bool = true
+    private var page: Int = 1
+    
+    
+    // Response Header에 넘어오는 code 값에 따라 success, failure 분리.
+    enum ResponseCode: Int {
+        case success = 0
+        case failure = -1000
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,14 +40,20 @@ class MainViewController: UIViewController {
         collectionView.register(nibName, forCellWithReuseIdentifier: "VideoCollectionViewCell")
         
         NetworkRequest.shared.requestVideoInfo(api: .videoInfo, method: .get) { (response: APIStruct) in
+            guard let code = response.header.code else { return }
             let body = response.body
-            if let next = body.hasNext {
-                self.hasNext = next
+            if code == ResponseCode.success.rawValue {
+                if let next = body.hasNext {
+                    self.hasNext = next
+                }
+                if let data = body.clips {
+                    self.infoArr = data
+                }
+                self.collectionView.reloadData()
+            } else if code == ResponseCode.failure.rawValue {
+                print("Response Failure: code \(code)")
             }
-            if let data = body.clips {
-                self.infoArr = data
-            }
-            self.collectionView.reloadData()
+            
         }
     }
     
@@ -59,7 +72,6 @@ class MainViewController: UIViewController {
 
 extension MainViewController: UICollectionViewDataSource, UICollectionViewDataSourcePrefetching {
     // prefetch함수를 이용해 hasNext가 true이면 다음 페이지의 데이터를 요청.
-    // TODO: - 미리 불러올 수 있도록 인덱스 설정을 해주어야 할 듯.
     func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
         dataLoad(indexPaths: indexPaths)
     }
@@ -120,13 +132,18 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDataSo
                 let params: Parameters = ["page": String(page)]
                 NetworkRequest.shared
                     .requestVideoInfo(api: .videoInfo, method: .get, parameters: params, encoding: URLEncoding.queryString) { (response: APIStruct) in
-                        if let next = response.body.hasNext {
-                            self.hasNext = next
+                        guard let code = response.header.code else { return }
+                        if code == ResponseCode.success.rawValue {
+                            if let next = response.body.hasNext {
+                                self.hasNext = next
+                            }
+                            if let data = response.body.clips {
+                                self.infoArr.append(contentsOf: data)
+                            }
+                            self.collectionView.reloadData()
+                        } else if code == ResponseCode.failure.rawValue {
+                            print("Response Failure: code \(code)")
                         }
-                        if let data = response.body.clips {
-                            self.infoArr.append(contentsOf: data)
-                        }
-                        self.collectionView.reloadData()
                 }
             }
         }
@@ -146,17 +163,20 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDelegate
         let params: Parameters = ["clipNo": String(clipno)]
         NetworkRequest.shared
             .requestVideoInfo(api: .filterInfo, method: .get, parameters: params, encoding: URLEncoding.queryString) { (response: FilterAPI) in
-                print("response: \(String(describing: response.body.filters))")
-                if let filters = response.body.filters {
-                    self.filterArr = filters
-                    // #1
-                    let videoName = self.getURL(self.dummyArr[0].videoName)
-                    if let videoURL = Bundle.main.url(forResource: videoName[0], withExtension: videoName[1]),
-                        let controller = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "VideoViewController") as? VideoViewController {
-                        let filteredItem = FilteredPlayerItem(videoURL: videoURL, filterArray: self.filterArr, animationRate: 1.0)
-                        controller.playerItem = filteredItem.playerItem
-                        self.navigationController?.pushViewController(controller, animated: false)
+                guard let code = response.header.code else { return }
+                if code == ResponseCode.success.rawValue {
+                    if let filters = response.body.filters {
+                        self.filterArr = filters
+                        let videoName = self.getURL(self.dummyArr[0].videoName)
+                        if let videoURL = Bundle.main.url(forResource: videoName[0], withExtension: videoName[1]),
+                            let controller = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "VideoViewController") as? VideoViewController {
+                            let filteredItem = FilteredPlayerItem(videoURL: videoURL, filterArray: self.filterArr, animationRate: 1.0)
+                            controller.playerItem = filteredItem.playerItem
+                            self.navigationController?.pushViewController(controller, animated: false)
+                        }
                     }
+                } else if code == ResponseCode.failure.rawValue {
+                    print("Response Failure: code \(code)")
                 }
         }
     }
