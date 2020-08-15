@@ -130,13 +130,15 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDataSo
         NetworkRequest.shared.requestVideoInfo(api: .videoInfo, method: .get, parameters: params, encoding: URLEncoding.queryString) { (response: APIStruct) in
                 guard let code = response.header.code else { return }
                 if code == ResponseCode.success.rawValue {
-                    if let next = response.body.hasNext {
-                        self.hasNext = next
+                    DispatchQueue.main.async {
+                        if let next = response.body.hasNext {
+                            self.hasNext = next
+                        }
+                        if let data = response.body.clips {
+                            self.infoArr.append(contentsOf: data)
+                        }
+                        self.collectionView.reloadData()
                     }
-                    if let data = response.body.clips {
-                        self.infoArr.append(contentsOf: data)
-                    }
-                    self.collectionView.reloadData()
                 } else if code == ResponseCode.failure.rawValue {
                     print("Response Failure: code \(code)")
                 }
@@ -158,16 +160,17 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDelegate
             guard let code = response.header.code else { return }
             
             if code == ResponseCode.success.rawValue {
-                let videoIndex = indexPath.row % self.dummyArr.count
-                let videoName = self.getURL(self.dummyArr[videoIndex].videoName)
-                guard let filters = response.body.filters,
-                    let videoURL = Bundle.main.url(forResource: videoName[0], withExtension: videoName[1]),
-                    let controller = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "VideoViewController") as? VideoViewController else { return }
-                
-                let filteredItem = FilteredPlayerItem(videoURL: videoURL, filterArray: filters, animationRate: 1.0)
-                controller.playerItem = filteredItem.playerItem
-                self.navigationController?.pushViewController(controller, animated: false)
-                
+                DispatchQueue.main.async {
+                    let videoIndex = indexPath.row % self.dummyArr.count
+                    let videoName = self.getURL(self.dummyArr[videoIndex].videoName)
+                    guard let filters = response.body.filters,
+                        let videoURL = Bundle.main.url(forResource: videoName[0], withExtension: videoName[1]),
+                        let controller = UIStoryboard.init(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "VideoViewController") as? VideoViewController else { return }
+                    
+                    let filteredItem = FilteredPlayerItem(videoURL: videoURL, filterArray: filters, animationRate: 1.0)
+                    controller.playerItem = filteredItem.playerItem
+                    self.navigationController?.pushViewController(controller, animated: false)
+                }
             } else if code == ResponseCode.failure.rawValue {
                 print("Response Failure: code \(code)")
             }
